@@ -1,9 +1,15 @@
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
+import BottomNavBar from "../../components/BottomNavBar";
+
+
 const HomeScreen = () => {
     return(
-        <SafeAreaView style={styles.safeArea}>
+      <View style={styles.root}>   
+        <SafeAreaView 
+          style={styles.safeArea}
+          edges={["top"]}> {/* only for top, want room for bottomNavBar */}
             <ScrollView
                 style={styles.screen}
                 contentContainerStyle={styles.contentContainer}
@@ -86,16 +92,26 @@ const HomeScreen = () => {
               </TouchableOpacity>
               ))}
             </View>
-
           </ScrollView>
         </SafeAreaView>
+        {/* bottom nav bar */}
+          <BottomNavBar
+            activeTab="home"
+            onTabPress={(tabKey) => {
+              console.log("Pressed tab:", tabKey); // later: use router.push("/calendar") etc.
+          }}
+        />
+      </View>
     )
 };
 
 const styles = StyleSheet.create({
+    root: {
+      flex: 1,
+      backgroundColor: "#00171F", // screen background
+    },
     safeArea: {
         flex: 1,
-        backgroundColor: "#00171F",
     }, 
     screen: {
         flex: 1,

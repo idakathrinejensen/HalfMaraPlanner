@@ -15,7 +15,6 @@ export default function TabLayout() {
         tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
         headerShown: false,
         tabBarButton: HapticTab,
-        tabBarStyle: { display: "none" }, // added by Ida temporarily
       }}>
       <Tabs.Screen
         name="index"

@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet, Text, View, Image } from "react-native";
+import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const HomeScreen = () => {
@@ -15,12 +15,12 @@ const HomeScreen = () => {
                     <Text style={styles.greeting}>Good morning,</Text>
                     <Text style={styles.name}>Leonardo da Vinci</Text>
                 </View>
-                <View style={styles.settingsButton}>
+                <TouchableOpacity style={styles.settingsButton}>
                   <Image
                     source={require("../../assets/icons/setting.png")}
                     resizeMode="contain"
                     />
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
                 {/* training progress */}
@@ -54,19 +54,21 @@ const HomeScreen = () => {
                 <Text style={styles.todayTime}>24 minutes</Text>
               </View>
 
-              <View style={styles.primaryButton}>
+              <TouchableOpacity style={styles.primaryButton}>
                 <Text style={styles.primaryButtonText}>Get Pre-Run Tips</Text>
-              </View>
+              </TouchableOpacity>
 
-              <View style={styles.secondaryButton}>
+              <TouchableOpacity style={styles.secondaryButton}>
                 <Text style={styles.secondaryButtonText}>Mark as Complete</Text>
-              </View>
+              </TouchableOpacity>
             </View>
 
             {/* upcoming runs */}
             <View style={styles.sectionHeaderRow}>
               <Text style={styles.sectionTitle}>Upcoming Runs</Text>
-              <Text style={styles.linkText}>View All</Text>
+              <TouchableOpacity>
+                <Text style={styles.linkText}>View All</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={styles.runsList}>
@@ -75,13 +77,13 @@ const HomeScreen = () => {
                 { day: "Thu, Nov 27", title: "REST - 3 km", time: "17 min"},
                 { day: "Sat, Nov 29", title: "TEMPO - 6 km", time: "32 min"},
               ]. map((run)=> (
-                <View key={run.day} style={styles.runCard}>
+                <TouchableOpacity key={run.day} style={styles.runCard}>
                 <View>
                   <Text style={styles.runDay}>{run.day}</Text>
                   <Text style={styles.runTitle}>{run.title}</Text>
                 </View>
                 <Text style={styles.runTime}>{run.time}</Text>
-              </View>
+              </TouchableOpacity>
               ))}
             </View>
 

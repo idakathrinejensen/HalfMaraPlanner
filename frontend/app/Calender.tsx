@@ -1,8 +1,22 @@
-import { Text, View, Image, SectionList, StyleSheet } from "react-native";
+import {
+  Text,
+  View,
+  Image,
+  SectionList,
+  StyleSheet,
+  TouchableOpacity,
+} from "react-native";
+import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
+import { Appbar } from "react-native-paper";
+import { Checkbox } from "react-native-paper";
 
 const Calender = () => {
+  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
+    {}
+  );
+
   type Item = {
     image: ImageSourcePropType;
     date: string;
@@ -12,9 +26,11 @@ const Calender = () => {
 
   type ItemCardProps = {
     item: Item;
+    isChecked: boolean;
+    onCheck: (checked: boolean) => void;
   };
 
-  const ItemCard = ({ item }: ItemCardProps) => (
+  const ItemCard = ({ item, isChecked, onCheck }: ItemCardProps) => (
     <View style={styles.card}>
       <Image source={item.image} style={styles.image} />
       <View style={styles.textContainer}>
@@ -22,6 +38,11 @@ const Calender = () => {
         <Text style={styles.text}>{item.description}</Text>
         <Text style={styles.time}>{item.time}</Text>
       </View>
+      <Checkbox
+          status={isChecked ? "checked" : "unchecked"}
+          onPress={() => onCheck(!isChecked)}
+          color="#4CAF50"
+        />
     </View>
   );
 
@@ -30,26 +51,70 @@ const Calender = () => {
       title: "Week 1",
       data: [
         {
-          date: "wed 18 nov",
+          date: "Wed, Nov 26",
           description: "Rest",
           image: require("../assets/images/Icons/green.png"),
         },
         {
-          date: "wed 20 nov",
+          date: "Thu, Nov 27",
           description: "Easy - 5 km",
           image: require("../assets/images/Icons/grey.png"),
-          time: "30 minutes"
+          time: "30 minutes",
+        },
+      ],
+    },
+    {
+      title: "Week 2",
+      data: [
+        {
+          date: "Wed, Nov 26",
+          description: "Rest",
+          image: require("../assets/images/Icons/green.png"),
+        },
+        {
+          date: "Thu, Nov 27",
+          description: "Easy - 5 km",
+          image: require("../assets/images/Icons/grey.png"),
+          time: "30 minutes",
         },
       ],
     },
   ];
 
   return (
-    <SafeAreaView style={styles.background}>
+    <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
+      <Appbar.Header style={styles.appBar}>
+        <TouchableOpacity
+          style={styles.backButton}
+          onPress={() => console.log("Back pressed")}
+        >
+          <Text style={styles.backArrow}>←</Text>
+        </TouchableOpacity>
+        <Appbar.Content
+          title="For parents"
+          titleStyle={{
+            fontSize: 36,
+            fontWeight: "bold",
+            lineHeight: 35,
+            color: "#FFF",
+          }}
+        />
+      </Appbar.Header>
       <SectionList
         sections={sections}
-        renderItem={({ item }) => <ItemCard item={item} />}
         keyExtractor={(item, index) => item.date + index}
+        renderItem={({ item, index }) => (
+          <ItemCard
+            item={item}
+            isChecked={!!checkedItems[item.date + index]}
+            onCheck={(value) =>
+              setCheckedItems((prev) => ({
+                ...prev,
+                [item.date + index]: value,
+              }))
+            }
+          />
+        )}
         renderSectionHeader={({ section: { title } }) => (
           <View style={styles.header}>
             <Text style={styles.headerText}>{title}</Text>
@@ -67,11 +132,30 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#00171F",
   },
+  backArrow: {
+    fontSize: 20,
+    color: "#FFF",
+  },
+  appBar: {
+    backgroundColor: "#00000000",
+    height: 35,
+    marginBottom: 28,
+  },
+  backButton: {
+    width: 42,
+    height: 42,
+    borderRadius: 22,
+    backgroundColor: "#FFFFFF1A",
+    justifyContent: "center",
+    alignItems: "center",
+    marginLeft: 20,
+  },
 
   header: {
     marginLeft: 24,
     height: 28,
     marginBottom: 12,
+    marginTop: 24,
   },
 
   headerText: {
@@ -102,6 +186,7 @@ const styles = StyleSheet.create({
 
   textContainer: {
     flex: 1,
+    marginRight: 12,
   },
 
   text: {
@@ -118,5 +203,9 @@ const styles = StyleSheet.create({
     color: "#FFF",
     opacity: 0.7,
     marginTop: 4,
-  }
+  },
+  checkbox: {
+    alignItems: "flex-end",
+    marginLeft: 12,
+  },
 });

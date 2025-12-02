@@ -1,7 +1,8 @@
 //register
-import { View, Text, TextInput, Button, Pressable } from 'react-native';
 import React, { useState } from 'react';
+import { Pressable, Text, TextInput, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
+import DatePicker from 'react-native-date-picker';
 
 export default function Register() {
   const [step, setStep] = useState<number>(1);
@@ -32,6 +33,9 @@ export default function Register() {
 
   // Step 1
   function CreateAccount({ onNext }: { onNext: () => void }) {
+    const [fullName, setFullName] = useState<string>('');
+    const [email, setEmail] = useState<string>('');
+    const [password, setPassword] = useState<string>('');
     return (
       <View style={{ gap: 16 }}>
 
@@ -50,6 +54,8 @@ export default function Register() {
         <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Full Name</Text>
         <TextInput
           placeholder="Enter your full name"
+          value={fullName}
+          onChangeText={setFullName}
           placeholderTextColor={'#94a3b8'}
           style={{
             backgroundColor: '#0f172a',
@@ -62,6 +68,8 @@ export default function Register() {
         <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Email</Text>
         <TextInput
           placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
           placeholderTextColor={'#94a3b8'}
           style={{
             backgroundColor: '#0f172a',
@@ -74,6 +82,8 @@ export default function Register() {
         <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Password</Text>
         <TextInput
           placeholder="Create a password"
+          value={password}
+          onChangeText={setPassword}
           placeholderTextColor={'#94a3b8'}
           secureTextEntry={true}
           style={{
@@ -199,7 +209,7 @@ export default function Register() {
   // Step 3
   function TrainingPlan({ onBack, onSubmit }: { onBack: () => void; onSubmit: () => void }) {
     const [open, setOpen] = useState(false);
-    const [duration, setDuration] = useState<string>('');
+    const [duration, setDuration] = useState<string>('12');
     const [durationItems, setDurationItems] = useState([
       { label: '8 weeks', value: '8' },
       { label: '10 weeks', value: '10' },
@@ -229,7 +239,9 @@ export default function Register() {
             value={duration}
             items={durationItems}
             setOpen={setOpen}
-            setValue={setDuration}
+            setValue={(callback) => {
+              setDuration(callback(duration));
+            }}
             setItems={setDurationItems}
             placeholder="Select duration"
             placeholderStyle={{ color: '#94a3b8' }}
@@ -271,7 +283,6 @@ export default function Register() {
           borderWidth: 1,
           borderColor: '#334155',
         }}>
-          <Text style={{ color: 'white', fontSize: 20 }}></Text>
           <Text style={{ color: 'white', flex: 1 }}>
             Your personalized {duration || '--'}-week training plan will be created based on your level of experience.
           </Text>

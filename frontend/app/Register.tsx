@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
-import DatePicker from 'react-native-date-picker';
+
 
 export default function Register() {
   const [step, setStep] = useState<number>(1);

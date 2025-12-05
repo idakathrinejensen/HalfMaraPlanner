@@ -10,7 +10,7 @@ import { useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
-import { Checkbox } from "react-native-paper";
+import { CheckBox } from "react-native-elements";
 
 const Calender = () => {
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
@@ -38,11 +38,15 @@ const Calender = () => {
         <Text style={styles.text}>{item.description}</Text>
         <Text style={styles.time}>{item.time}</Text>
       </View>
-      <Checkbox
-          status={isChecked ? "checked" : "unchecked"}
-          onPress={() => onCheck(!isChecked)}
-          color="#4CAF50"
-        />
+      <CheckBox
+        checked={isChecked}
+        onPress={() => onCheck(!isChecked)}
+        iconType="material"
+        checkedIcon="radio-button-checked"
+        uncheckedIcon="radio-button-unchecked"
+        checkedColor="#8B80F9"
+        uncheckedColor="#6B7280"
+      />
     </View>
   );
 
@@ -67,12 +71,12 @@ const Calender = () => {
       title: "Week 2",
       data: [
         {
-          date: "Wed, Nov 26",
+          date: "Wed, Nov 28",
           description: "Rest",
           image: require("../assets/images/Icons/green.png"),
         },
         {
-          date: "Thu, Nov 27",
+          date: "Thu, Nov 30",
           description: "Easy - 5 km",
           image: require("../assets/images/Icons/grey.png"),
           time: "30 minutes",
@@ -91,11 +95,11 @@ const Calender = () => {
           <Text style={styles.backArrow}>←</Text>
         </TouchableOpacity>
         <Appbar.Content
-          title="For parents"
+          title="Training Calendar"
           titleStyle={{
-            fontSize: 36,
+            fontSize: 30,
             fontWeight: "bold",
-            lineHeight: 35,
+            lineHeight: 40,
             color: "#FFF",
           }}
         />
@@ -138,8 +142,13 @@ const styles = StyleSheet.create({
   },
   appBar: {
     backgroundColor: "#00000000",
-    height: 35,
+    alignContent: "center",
+    justifyContent: "center",
+    height: 60,
     marginBottom: 28,
+    paddingBottom: 15,
+    borderBottomWidth: 1,       
+    borderBottomColor: "#6B7280",
   },
   backButton: {
     width: 42,

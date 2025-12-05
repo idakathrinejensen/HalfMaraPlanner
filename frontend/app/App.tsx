@@ -9,11 +9,13 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
+
     <SafeAreaProvider>
       <Stack.Navigator initialRouteName="Calender">
         <Stack.Screen name="Calender" component={Calender} />
         <Stack.Screen name="Register" component={Register} />
       </Stack.Navigator>
     </SafeAreaProvider>
+
   );
 }

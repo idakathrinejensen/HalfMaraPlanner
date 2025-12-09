@@ -9,7 +9,9 @@ const HomeScreen = () => {
       <View style={styles.root}>   
         <SafeAreaView 
           style={styles.safeArea}
-          edges={["top"]}> {/* only for top, want room for bottomNavBar */}
+          edges={["top"]}>     
+          {/* only for top, want room for bottomNavBar */}
+          
             <ScrollView
                 style={styles.screen}
                 contentContainerStyle={styles.contentContainer}

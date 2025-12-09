@@ -10,6 +10,10 @@ app.get("/", (req, res) => {
   res.send("Hello from your Node.js + Express backend!");
 });
 
+// weather route
+const weatherRoute = require("./routes/weatherRoute");
+app.use("/weather", weatherRoute);
+
 // Start server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

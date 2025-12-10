@@ -13,7 +13,7 @@ export default function Login() {
     // Handle login logic here
     console.log('Logging in with:', email, password);
     // Navigate to the main app screen after login
-    navigation.navigate('MainApp' as never);
+    navigation.navigate('HomeScreen' as never);
   };
 
   return (
@@ -104,6 +104,7 @@ export default function Login() {
             color: '#cbd5e1',
             marginTop: 20,
             textAlign: 'center',
+            textDecorationLine: 'underline',
           }}
         >
           Don’t have an account? Sign up

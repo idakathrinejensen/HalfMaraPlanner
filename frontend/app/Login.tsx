@@ -3,19 +3,37 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebaseConfig';
 
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const navigation = useNavigation();
 
-  const handleLogin = () => {
-    // Handle login logic here
-    console.log('Logging in with:', email, password);
-    // Navigate to the main app screen after login
-    navigation.navigate('HomeScreen' as never);
-  };
+  // Handle login button press
+  const handleLogin = async () => {
+  // Basic validation
+  if (!email || !password) {
+    alert('Please enter both email and password.');
+    return;
+  }
 
+  try {
+  // Attempt to sign in the user (Firabase)
+    await signInWithEmailAndPassword(auth, email, password);
+    console.log('Logging in with:', email);
+
+    // Navigate to HomeScreen on successful login
+    navigation.navigate('HomeScreen' as never);
+
+  } catch (error) {
+    console.log(error);
+    alert('Login failed. Please check your credentials and try again.');
+  }
+};
+
+  // Render login form
   return (
     <View style={{
       flex: 1,
@@ -40,6 +58,7 @@ export default function Login() {
         Continue your training journey
       </Text>
 
+      {/* Login Form */}
       <View style={{
         width: '100%',
         backgroundColor: '#1e293b',
@@ -67,6 +86,7 @@ export default function Login() {
           }}
         />
 
+          {/* Password Input */}
         <Text style={{ color: '#cbd5e1', marginBottom: 6 }}>Password</Text>
         <TextInput
           placeholder="Enter your password"
@@ -86,6 +106,7 @@ export default function Login() {
           }}
         />
 
+          {/* Login Button */}
         <Pressable
           onPress={handleLogin}
           style={{
@@ -98,6 +119,7 @@ export default function Login() {
           <Text style={{ color: 'white', fontWeight: '600', fontSize: 16 }}>Log In</Text>
         </Pressable>
 
+          {/* Navigate to Register Screen */}
         <Text
           onPress={() => navigation.navigate('Register' as never)}
           style={{

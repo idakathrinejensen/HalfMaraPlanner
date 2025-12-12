@@ -1,6 +1,6 @@
 const axios = require("axios"); // so HTTP works
 
-const WEATHER_KEY = env.OPENWEATHER_API_KEY;
+const API_KEY = process.env.OPENWEATHER_API_KEY;
 if (!API_KEY) {
   console.warn("Missing OPENWEATHER_API_KEY in backend .env");
 }
@@ -38,7 +38,7 @@ async function getOneCall(lat, lon) {
   return resp.data;
 }
 
-
+// for hard-coded city - maybe delete?
 async function getWeatherByCity(city) {
   const { lat, lon, name, country } = await geocodeCity(city);
   const data = await getOneCall(lat, lon);
@@ -63,4 +63,27 @@ async function getWeatherByCity(city) {
   };
 }
 
-module.exports = { getWeatherByCity };
+// weather for current location
+async function getWeatherByCoords(lat, lon) {
+  const data = await getOneCall(lat, lon);
+
+  const current = data.current;
+  const weather0 = current.weather?.[0];
+  const pop0 = data.hourly?.[0]?.pop; // from hourly forecast take first hour and read pop (0-1)
+  const precipitationProbability = // convert to %
+      typeof pop0 === "number" ? Math.round(pop0 * 100) : null;
+
+  return {
+    location: "Current location",
+    temperatureC: Math.round(current.temp),
+    windSpeedMs: current.wind_speed,
+    windSpeedKmh: Math.round(current.wind_speed * 3.6),
+    humidity: current.humidity,
+    condition: weather0?.main ?? "Unknown",
+    conditionDescription: weather0?.description ?? "",
+    precipitationProbability,
+    rainMmLastHour: current.rain?.["1h"] ?? 0,
+  };
+}
+
+module.exports = { getWeatherByCity, getWeatherByCoords };

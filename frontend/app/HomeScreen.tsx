@@ -1,12 +1,14 @@
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ActivityIndicator } from "react-native-paper";
 import React, { useState } from "react";
+import * as Location from "expo-location";
 
 import BottomNavBar from "../components/BottomNavBar";
 
-import { fetchWeatherByCity, WeatherDTO } from "../scripts/weatherService";
+import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";
 import { generateTips, Tips } from "../scripts/tips";
-import { ActivityIndicator } from "react-native-paper";
+
 
 const HomeScreen = () => {
   // pre-run tips settup
@@ -16,23 +18,36 @@ const HomeScreen = () => {
   const [loadingTips, setLoadingTips] = useState(false);
   const [tipsError, setTipsError] = useState<string | null>(null);
 
+  
+   
   async function onPressPreRunTips() {
-    try {
-      setLoadingTips(true);
-      setTipsError(null);
+  try {
+    setLoadingTips(true);
+    setTipsError(null);
 
-      // Fixed city for now; later replace with user's location/city setting
-      const w = await fetchWeatherByCity("Copenhagen");
-
-      setWeather(w);
-      setTips(generateTips(w));
-      setTipsVisible(true);
-    } catch (e: any) {
-      setTipsError(e?.message ?? "Could not load tips.");
-    } finally {
-      setLoadingTips(false);
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      throw new Error("Location permission denied");
     }
+
+    const pos = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = pos.coords;
+
+    const w = await fetchWeatherByCoords(latitude, longitude);
+
+    // Fixed city; later replace with user's location/city setting
+    //const w = await fetchWeatherByCity("Milan");
+    
+    setWeather(w);
+    setTips(generateTips(w));
+    setTipsVisible(true);
+  } catch (e: any) {
+    setTipsError(e?.message ?? "Could not load tips.");
+  } finally {
+    setLoadingTips(false);
   }
+}
+
 
     return(
       <View style={styles.root}>   
@@ -119,7 +134,7 @@ const HomeScreen = () => {
             <>
               {/* Current Weather */}
               <View style={styles.infoCard}>
-                <Text style={styles.infoCardTitle}>☁️  Current Weather</Text>
+                <Text style={styles.infoCardTitle}>Current Weather</Text>
 
                 <View style={styles.infoRow}>
                   <View style={{ flex: 1 }}>
@@ -137,7 +152,7 @@ const HomeScreen = () => {
                   <Text style={styles.infoMeta}>💧 {weather.humidity}%</Text>
                   <Text style={styles.infoMeta}>💨 {weather.windSpeedKmh} km/h</Text>
                   <Text style={styles.infoMeta}>
-                    🌧️ {weather.precipitationProbability ?? 0}%{" "}
+                    🌧️ {weather.precipitationProbability ?? 0}%
                   </Text>
                 </View>
 
@@ -149,19 +164,19 @@ const HomeScreen = () => {
 
               {/* Clothing */}
               <View style={styles.tipCard}>
-                <Text style={styles.tipTitle}>👕  Clothing</Text>
+                <Text style={styles.tipTitle}>Clothing</Text>
                 <Text style={styles.tipText}>{tips.Clothing}</Text>
               </View>
 
               {/* Hydration */}
               <View style={styles.tipCard}>
-                <Text style={styles.tipTitle}>💧  Hydration</Text>
+                <Text style={styles.tipTitle}>Hydration</Text>
                 <Text style={styles.tipText}>{tips.Hydration}</Text>
               </View>
 
               {/* Energy */}
               <View style={styles.tipCard}>
-                <Text style={styles.tipTitle}>⚡  Energy</Text>
+                <Text style={styles.tipTitle}>Energy</Text>
                 <Text style={styles.tipText}>{tips.Energy}</Text>
               </View>
             </>
@@ -368,7 +383,7 @@ const styles = StyleSheet.create({
       backgroundColor: "rgba(255,255,255,0.05)",
       borderRadius: 16,
       borderWidth: 1,
-      borderColor: "rgba(255, 255, 255, 0.1",
+      borderColor: "rgba(255, 255, 255, 0.1)",
       padding: 16,
       marginBottom: 12,
     },

@@ -2,6 +2,8 @@ const express = require("express");
 const app = express();
 const port = 3000;
 
+require("dotenv").config(); // retrieving API key
+
 // Middleware to handle JSON
 app.use(express.json());
 
@@ -13,6 +15,14 @@ app.get("/", (req, res) => {
 // weather route
 const weatherRoute = require("./routes/weatherRoute");
 app.use("/weather", weatherRoute);
+
+// basic error handler (so errors return JSON)
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  res.status(status).json({
+    error: err.message || "Server error",
+  });
+});
 
 // Start server
 app.listen(port, () => {

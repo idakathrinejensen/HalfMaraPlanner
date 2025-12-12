@@ -1,10 +1,39 @@
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import React, { useState } from "react";
 
 import BottomNavBar from "../components/BottomNavBar";
 
+import { fetchWeatherByCity, WeatherDTO } from "../scripts/weatherService";
+import { generateTips, Tips } from "../scripts/tips";
+import { ActivityIndicator } from "react-native-paper";
 
 const HomeScreen = () => {
+  // pre-run tips settup
+  const [tipsVisible, setTipsVisible] = useState(false);
+  const [weather, setWeather] = useState<WeatherDTO | null>(null);
+  const [tips, setTips] = useState<Tips | null>(null);
+  const [loadingTips, setLoadingTips] = useState(false);
+  const [tipsError, setTipsError] = useState<string | null>(null);
+
+  async function onPressPreRunTips() {
+    try {
+      setLoadingTips(true);
+      setTipsError(null);
+
+      // Fixed city for now; later replace with user's location/city setting
+      const w = await fetchWeatherByCity("Copenhagen");
+
+      setWeather(w);
+      setTips(generateTips(w));
+      setTipsVisible(true);
+    } catch (e: any) {
+      setTipsError(e?.message ?? "Could not load tips.");
+    } finally {
+      setLoadingTips(false);
+    }
+  }
+
     return(
       <View style={styles.root}>   
         <SafeAreaView 
@@ -62,14 +91,83 @@ const HomeScreen = () => {
                 <Text style={styles.todayTime}>24 minutes</Text>
               </View>
 
-              <TouchableOpacity style={styles.primaryButton}>
-                <Text style={styles.primaryButtonText}>Get Pre-Run Tips</Text>
+              <TouchableOpacity 
+              style={styles.primaryButton}
+              onPress={() => {
+                if (tipsVisible) setTipsVisible(false);
+                else onPressPreRunTips();
+              }}
+              disabled={loadingTips}
+              >
+                {loadingTips ? (
+                  <ActivityIndicator/>
+                ) : (
+                <Text style={styles.primaryButtonText}>
+                  {tipsVisible ? "Hide Tips" : "Get Pre-Run Tips"}
+                  </Text>
+                )}
               </TouchableOpacity>
 
               <TouchableOpacity style={styles.secondaryButton}>
                 <Text style={styles.secondaryButtonText}>Mark as Complete</Text>
               </TouchableOpacity>
             </View>
+
+          {tipsError ? <Text style={styles.errorText}>{tipsError}</Text> : null}
+
+          {tipsVisible && weather && tips ? (
+            <>
+              {/* Current Weather */}
+              <View style={styles.infoCard}>
+                <Text style={styles.infoCardTitle}>☁️  Current Weather</Text>
+
+                <View style={styles.infoRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.infoLabel}>Temperature</Text>
+                    <Text style={styles.infoValue}>{weather.temperatureC}°C</Text>
+                  </View>
+
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.infoLabel}>Conditions</Text>
+                    <Text style={styles.infoValue}>{weather.condition}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoMeta}>💧 {weather.humidity}%</Text>
+                  <Text style={styles.infoMeta}>💨 {weather.windSpeedKmh} km/h</Text>
+                  <Text style={styles.infoMeta}>
+                    🌧️ {weather.precipitationProbability ?? 0}%{" "}
+                  </Text>
+                </View>
+
+                {/* optional extra line if you want */}
+                {weather.rainMmLastHour > 0 ? (
+                  <Text style={styles.infoMeta}>Rain last hour: {weather.rainMmLastHour} mm</Text>
+                ) : null}
+              </View>
+
+              {/* Clothing */}
+              <View style={styles.tipCard}>
+                <Text style={styles.tipTitle}>👕  Clothing</Text>
+                <Text style={styles.tipText}>{tips.Clothing}</Text>
+              </View>
+
+              {/* Hydration */}
+              <View style={styles.tipCard}>
+                <Text style={styles.tipTitle}>💧  Hydration</Text>
+                <Text style={styles.tipText}>{tips.Hydration}</Text>
+              </View>
+
+              {/* Energy */}
+              <View style={styles.tipCard}>
+                <Text style={styles.tipTitle}>⚡  Energy</Text>
+                <Text style={styles.tipText}>{tips.Energy}</Text>
+              </View>
+            </>
+          ) : null}
+
+
 
             {/* upcoming runs */}
             <View style={styles.sectionHeaderRow}>
@@ -259,6 +357,66 @@ const styles = StyleSheet.create({
       color: "#FFFFFF",
       fontSize: 16,
       fontWeight: "500",
+    },
+    errorText: {
+      color: "#FFFFFF", 
+      marginBottom: 12,
+    },
+
+    // weather + tips cards
+    infoCard: {
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: "rgba(255, 255, 255, 0.1",
+      padding: 16,
+      marginBottom: 12,
+    },
+    infoCardTitle: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 12,
+    },
+    infoRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 10,
+    },
+    infoLabel: {
+      color: "rgba(255,255,255,0.7)",
+      fontSize: 14,
+      marginBottom: 4,
+    },
+    infoValue: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "500",
+    },
+    infoMeta: {
+      color: "#FFFFFF",
+      fontSize: 14,
+      marginRight: 12,
+    },
+    tipCard: {
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.1)",
+      padding: 16,
+      marginBottom: 12,
+    },
+    tipTitle: {
+      color: "rgba(255,255,255,0.75)",
+      fontSize: 16,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
+    tipText: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "500",
+      lineHeight: 22,
     },
 
     // upcoming runs

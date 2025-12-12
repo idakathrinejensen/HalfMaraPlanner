@@ -11,14 +11,15 @@ import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
-  // pre-run tips settup
+  // pre-run tips states
   const [tipsVisible, setTipsVisible] = useState(false);
   const [weather, setWeather] = useState<WeatherDTO | null>(null);
   const [tips, setTips] = useState<Tips | null>(null);
   const [loadingTips, setLoadingTips] = useState(false);
   const [tipsError, setTipsError] = useState<string | null>(null);
 
-  
+  // completed state
+  const [workoutCompleted, setWorkoutCompleted] = useState(false);
    
   async function onPressPreRunTips() {
   try {
@@ -46,6 +47,11 @@ const HomeScreen = () => {
   } finally {
     setLoadingTips(false);
   }
+}
+
+function onPressMarkAsComplete() {
+  setWorkoutCompleted(true);
+  setTipsVisible(false); // hide pre-run tips
 }
 
 
@@ -100,6 +106,11 @@ const HomeScreen = () => {
             </View>
 
             <View style={styles.todayCard}>
+              {workoutCompleted ? (
+                <View style={styles.completedPill}>
+                <Text style={styles.completedPillText}>✓ Completed</Text>
+                </View>
+              ) : null}
               <View style={{marginBottom:24}}>
                 <Text style={styles.todayType}>REST RUN</Text>
                 <Text style={styles.todayDistance}>5 km</Text>
@@ -112,21 +123,40 @@ const HomeScreen = () => {
                 if (tipsVisible) setTipsVisible(false);
                 else onPressPreRunTips();
               }}
-              disabled={loadingTips}
+              disabled={loadingTips || workoutCompleted}
               >
                 {loadingTips ? (
                   <ActivityIndicator/>
                 ) : (
                 <Text style={styles.primaryButtonText}>
-                  {tipsVisible ? "Hide Tips" : "Get Pre-Run Tips"}
+                  {workoutCompleted ? "Workout Completed" : tipsVisible ? "Hide Tips" : "Get Pre-Run Tips"}
                   </Text>
                 )}
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.secondaryButton}>
-                <Text style={styles.secondaryButtonText}>Mark as Complete</Text>
+              <TouchableOpacity 
+                style={[styles.secondaryButton, workoutCompleted && styles.secondaryButtonCompleted]}
+                onPress={onPressMarkAsComplete}
+                disabled={workoutCompleted}
+                >
+                <Text style={styles.secondaryButtonText}>
+                  {workoutCompleted ? "Completed" : "Mark as Complete"}
+                  </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Completed run text*/}
+              {workoutCompleted ? (
+                <View style={styles.completedCard}>
+                  <Text style={styles.completedTitle}>Great job completing your run!</Text>
+
+                  <Text style={styles.completedSubtitle}>Don't forget to:</Text>
+
+                  <Text style={styles.completedBullet}>• Stretch for 10–15 minutes</Text>
+                  <Text style={styles.completedBullet}>• Hydrate and refuel</Text>
+                  <Text style={styles.completedBullet}>• Log how you felt during the run</Text>
+                </View>
+              ) : null}
 
           {tipsError ? <Text style={styles.errorText}>{tipsError}</Text> : null}
 
@@ -330,6 +360,7 @@ const styles = StyleSheet.create({
       backgroundColor: "rgba(139,128,249,0.1)", // 10% opacity
       padding: 24,
       marginBottom: 24,
+      position: "relative",
     },
     todayType: {
       color: "#FFFFFF",
@@ -376,6 +407,54 @@ const styles = StyleSheet.create({
     errorText: {
       color: "#FFFFFF", 
       marginBottom: 12,
+    },
+
+    //completed
+    completedPill: {
+      position: "absolute",
+      top: 16,
+      right: 16,
+      backgroundColor: "rgba(255,255,255,0.85)",
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: 999,
+    },
+    completedPillText: {
+      color: "#00171F",
+      fontSize: 14,
+      fontWeight: "600",
+    },
+
+    secondaryButtonCompleted: {
+      backgroundColor: "rgba(255,255,255,0.08)",
+      borderColor: "rgba(255,255,255,0.25)",
+    },
+
+    completedCard: {
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.2)",
+      padding: 16,
+      marginBottom: 24,
+    },
+    completedTitle: {
+      color: "#FFF7D6",
+      fontSize: 16,
+      fontWeight: "700",
+      marginBottom: 12,
+    },
+    completedSubtitle: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "600",
+      marginBottom: 10,
+    },
+    completedBullet: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      lineHeight: 24,
+      marginBottom: 6,
     },
 
     // weather + tips cards

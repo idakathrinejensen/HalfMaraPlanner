@@ -5,12 +5,15 @@ import React, { useState } from "react";
 import * as Location from "expo-location";
 
 import BottomNavBar from "../components/BottomNavBar";
+import { useNavigation } from "@react-navigation/native";
 
 import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";
 import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
+  const navigation = useNavigation<any>();
+
   // pre-run tips states
   const [tipsVisible, setTipsVisible] = useState(false);
   const [weather, setWeather] = useState<WeatherDTO | null>(null);
@@ -243,8 +246,10 @@ function onPressMarkAsComplete() {
           <BottomNavBar
             activeTab="home"
             onTabPress={(tabKey) => {
-              console.log("Pressed tab:", tabKey); // later: use router.push("/calendar") etc.
-          }}
+              if (tabKey === "home") navigation.navigate("Home");
+              if (tabKey === "calendar") navigation.navigate("Calender");
+              if (tabKey === "settings") navigation.navigate("Settings");
+            }}
         />
       </View>
     )

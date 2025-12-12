@@ -12,7 +12,13 @@ import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
 
+import { useNavigation } from "@react-navigation/native";
+import BottomNavBar from "../components/BottomNavBar";
+
+
 const Calender = () => {
+  const navigation = useNavigation<any>();
+
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
   );
@@ -86,6 +92,7 @@ const Calender = () => {
   ];
 
   return (
+    <View style={styles.root}>
     <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
       <Appbar.Header style={styles.appBar}>
         <TouchableOpacity
@@ -126,15 +133,28 @@ const Calender = () => {
         )}
       />
     </SafeAreaView>
+    {/* bottom nav bar */}
+          <BottomNavBar
+            activeTab="calendar"
+            onTabPress={(tabKey) => {
+              if (tabKey === "home") navigation.navigate("Home");
+              if (tabKey === "calendar") navigation.navigate("Calender");
+              if (tabKey === "settings") navigation.navigate("Settings");
+          }}
+        />
+    </View>
   );
 };
 
 export default Calender;
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: "#00171F", // screen background
+  },
   background: {
     flex: 1,
-    backgroundColor: "#00171F",
   },
   backArrow: {
     fontSize: 20,

@@ -2,7 +2,7 @@ import {View, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 
-import BottomNavBar from "../components/BottomNavBar";
+//import BottomNavBar from "../components/BottomNavBar";
 
 
 const Settings = () => {
@@ -14,7 +14,7 @@ const Settings = () => {
       
     </SafeAreaView>
     
-      {/* bottom nav bar */}
+      {/* bottom nav bar - TO BE DELETED
           <BottomNavBar
             activeTab="settings"
             onTabPress={(tabKey) => {
@@ -22,7 +22,7 @@ const Settings = () => {
               if (tabKey === "calendar") navigation.navigate("Calender");
               if (tabKey === "settings") navigation.navigate("Settings");
           }}
-        />
+        /> */}
     </View>
   );
 };

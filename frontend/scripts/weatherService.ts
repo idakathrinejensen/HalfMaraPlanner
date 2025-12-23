@@ -10,8 +10,8 @@ export type WeatherDTO = {
   rainMmLastHour: number; // mm
 };
 
-// Use computer IP, e.g. http://192.168.1.20:3000. use localhost for browser
-const BACKEND_BASE_URL = "http://172.20.10.10:3000";
+// Use network IP, fx http://192.168.1.20:3000.
+const BACKEND_BASE_URL = "http://192.168.1.41:3000";
 
 async function requestJson<T>(url: string): Promise<T> {
   const res = await fetch(url);
@@ -31,5 +31,6 @@ export function fetchWeatherByCity(city: string): Promise<WeatherDTO> {
 
 export function fetchWeatherByCoords(lat: number, lon: number): Promise<WeatherDTO> {
   const url = `${BACKEND_BASE_URL}/weather/coords?lat=${lat}&lon=${lon}`;
+  console.log("coords", lat, lon);
   return requestJson<WeatherDTO>(url);
 }

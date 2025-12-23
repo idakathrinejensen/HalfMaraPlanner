@@ -4,7 +4,7 @@ import { ActivityIndicator } from "react-native-paper";
 import React, { useState } from "react";
 import * as Location from "expo-location";
 
-import BottomNavBar from "../components/BottomNavBar";
+//import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
 
 import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";
@@ -92,7 +92,7 @@ function onPressMarkAsComplete() {
                           <Text style={styles.progressSubLabel}>Week 1 of 12</Text>
                       </View>
 
-                      <View style={{ alignItems: "flex-end" }}> {/*right align */}
+                      <View style={{ alignItems: "flex-end" }}>
                           <Text style={styles.progressPercent}>0%</Text>
                           <Text style={styles.progressRuns}>0/84 runs</Text>
                       </View>
@@ -242,7 +242,7 @@ function onPressMarkAsComplete() {
             </View>
           </ScrollView>
         </SafeAreaView>
-        {/* bottom nav bar */}
+        {/* bottom nav bar - TO BE DELETED
           <BottomNavBar
             activeTab="home"
             onTabPress={(tabKey) => {
@@ -250,7 +250,7 @@ function onPressMarkAsComplete() {
               if (tabKey === "calendar") navigation.navigate("Calender");
               if (tabKey === "settings") navigation.navigate("Settings");
             }}
-        />
+        /> */}
       </View>
     )
 };
@@ -269,6 +269,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingHorizontal: 24,
         paddingVertical: 24,
+        paddingBottom: 120,
     },
 
     //header

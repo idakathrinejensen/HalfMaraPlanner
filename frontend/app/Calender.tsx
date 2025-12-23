@@ -13,7 +13,7 @@ import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
 
 import { useNavigation } from "@react-navigation/native";
-import BottomNavBar from "../components/BottomNavBar";
+//import BottomNavBar from "../components/BottomNavBar";
 
 
 const Calender = () => {
@@ -133,7 +133,7 @@ const Calender = () => {
         )}
       />
     </SafeAreaView>
-    {/* bottom nav bar */}
+    {/* bottom nav bar - TO BE DELETED
           <BottomNavBar
             activeTab="calendar"
             onTabPress={(tabKey) => {
@@ -141,7 +141,7 @@ const Calender = () => {
               if (tabKey === "calendar") navigation.navigate("Calender");
               if (tabKey === "settings") navigation.navigate("Settings");
           }}
-        />
+        /> */}
     </View>
   );
 };

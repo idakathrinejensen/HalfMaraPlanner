@@ -95,12 +95,6 @@ const Calender = () => {
     <View style={styles.root}>
     <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
       <Appbar.Header style={styles.appBar}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => console.log("Back pressed")}
-        >
-          <Text style={styles.backArrow}>←</Text>
-        </TouchableOpacity>
         <Appbar.Content
           title="Training Calendar"
           titleStyle={{
@@ -155,10 +149,6 @@ const styles = StyleSheet.create({
   },
   background: {
     flex: 1,
-  },
-  backArrow: {
-    fontSize: 20,
-    color: "#FFF",
   },
   appBar: {
     backgroundColor: "#00000000",

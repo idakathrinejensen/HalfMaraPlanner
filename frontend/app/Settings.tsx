@@ -4,8 +4,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Appbar } from "react-native-paper";
 
-import profileIcon from "/../assets/icons/profile.png"; 
-
 const Settings = () => {
   const navigation = useNavigation<any>();
 
@@ -38,11 +36,11 @@ const Settings = () => {
             {/* top row */}
             <View style={styles.profileTopRow}>
               <View style={styles.avatar}>
-                <Image source={profileIcon} style={styles.avatarIcon} resizeMode="contain" />
+                <Image source={require("../assets/icons/profile.png")} style={styles.avatarIcon} resizeMode="contain" />
               </View>
               <View style={styles.profileTextCol}>
-                <Text style={styles.profileName}>Ida Kathrine Jensen</Text>
-                <Text style={styles.profileEmail}>idje@itu.dk</Text>
+                <Text style={styles.profileName}>Leonardo da Vinci</Text>
+                <Text style={styles.profileEmail}>leo@polimi.it</Text>
               </View>
             </View>
 
@@ -68,25 +66,8 @@ const Settings = () => {
 
           <View style={styles.card}>
             <View style={styles.iconRow}>
-              {/* calendar-ish icon */}
-              <View style={styles.smallIconWrap}>
-                <Svg width="20" height="20" viewBox="0 0 17 17" fill="none">
-                  <Path
-                    d="M14.1668 0.8335H2.5002C1.5797 0.8335 0.8335 1.5797 0.8335 2.5002V14.1668C0.8335 15.0873 1.5797 15.8335 2.5002 15.8335H14.1668C15.0873 15.8335 15.8335 15.0873 15.8335 14.1668V2.5002C15.8335 1.5797 15.0873 0.8335 14.1668 0.8335Z"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    d="M0.8335 5.5H15.8335"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </View>
+              {/* calendar icon */}
+              <Image source={require("../assets/icons/calendar_purple.png")} style={styles.purpleIcon} resizeMode="contain" />
 
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Start Date</Text>
@@ -95,54 +76,8 @@ const Settings = () => {
             </View>
 
             <View style={styles.iconRow}>
-              {/* trophy-ish icon */}
-              <View style={styles.smallIconWrap}>
-                <Svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                  <Path
-                    d="M8 4h8v3a4 4 0 0 1-8 0V4Z"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    d="M6 5H4a2 2 0 0 0 2 2"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    d="M18 5h2a2 2 0 0 1-2 2"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    d="M12 11v3"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    d="M8 20h8"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <Path
-                    d="M10 14h4v6h-4v-6Z"
-                    stroke="#8B80F9"
-                    strokeWidth="1.7"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </Svg>
-              </View>
-
+              {/* trophy icon */}
+              <Image source={require("../assets/icons/trophy_purple.png")} style={styles.purpleIcon} resizeMode="contain" />
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Target Race Date</Text>
                 <Text style={styles.cardValue}>June 21, 2026</Text>
@@ -168,19 +103,11 @@ const Settings = () => {
             activeOpacity={0.85}
             style={styles.logoutButton}
             onPress={() => {
-              // navigation.navigate("Login"); // or your logout flow
+              navigation.navigate("Login");
             }}
           >
-            <View style={styles.logoutIconWrap}>
-            </View>
             <Text style={styles.logoutText}>Log Out</Text>
           </TouchableOpacity>
-
-          {/* FOOTNOTE */}
-          <View style={styles.noteWrap}>
-            <Text style={styles.noteText}>Note: Weather data is currently mocked.</Text>
-            <Text style={styles.noteText}>Connect to OpenWeather API for live weather updates.</Text>
-          </View>
         </ScrollView>
       </SafeAreaView>
     </View>
@@ -354,5 +281,10 @@ const styles = StyleSheet.create({
   width: 24,
   height: 24,
   tintColor: "#FFFFFF", // remove if your asset already is white
+},
+purpleIcon: {
+  width: 24,
+  height: 24,
+  tintColor: "#8B80F9", // remove if your asset already is white
 },
 });

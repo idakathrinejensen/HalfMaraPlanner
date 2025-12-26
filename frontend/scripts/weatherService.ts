@@ -11,7 +11,7 @@ export type WeatherDTO = {
 };
 
 // Use network IP, fx http://192.168.1.20:3000.
-const BACKEND_BASE_URL = "http://192.168.1.41:3000";
+const BACKEND_BASE_URL = "http://172.20.10.2:3000";
 
 async function requestJson<T>(url: string): Promise<T> {
   const res = await fetch(url);

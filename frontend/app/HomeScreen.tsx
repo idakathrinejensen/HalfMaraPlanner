@@ -76,12 +76,6 @@ function onPressMarkAsComplete() {
                     <Text style={styles.greeting}>Good morning,</Text>
                     <Text style={styles.name}>Leonardo da Vinci</Text>
                 </View>
-                <TouchableOpacity style={styles.settingsButton}>
-                  <Image
-                    source={require("../assets/icons/setting.png")}
-                    resizeMode="contain"
-                    />
-                    </TouchableOpacity>
                 </View>
 
                 {/* training progress */}
@@ -242,15 +236,6 @@ function onPressMarkAsComplete() {
             </View>
           </ScrollView>
         </SafeAreaView>
-        {/* bottom nav bar - TO BE DELETED
-          <BottomNavBar
-            activeTab="home"
-            onTabPress={(tabKey) => {
-              if (tabKey === "home") navigation.navigate("Home");
-              if (tabKey === "calendar") navigation.navigate("Calender");
-              if (tabKey === "settings") navigation.navigate("Settings");
-            }}
-        /> */}
       </View>
     )
 };

@@ -15,10 +15,10 @@ export function generateTips(w: WeatherDTO): Tips {
   if (temp < 5) clothing = "Wear thermal layers and consider gloves/hat. Warm up extra.";
   else if (temp < 10) clothing = "Wear layers (long-sleeve + light jacket). You can adjust as you warm up.";
   else if (temp < 20) clothing = "A light long-sleeve or thin jacket works well.";
-  else clothing = "Go for light, breathable clothing. Consider a cap if sunny.";
+  else clothing = "Go for light, breathable clothing. Consider a cap.";
 
-  if (rainMm > 0 || pop > 40) clothing += " Rain is likely—bring a light rain jacket or cap.";
-  if (wind > 25) clothing += " It’s windy—add a windproof layer and avoid very exposed routes.";
+  if (rainMm > 0 || pop > 40) clothing += " Rain is likely, bring a light rain jacket or cap.";
+  if (wind > 25) clothing += " It’s windy, add a windproof layer and avoid very exposed routes.";
 
   // Hydration
   let hydration = "Drink some water before your run and have water ready after.";

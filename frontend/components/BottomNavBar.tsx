@@ -1,4 +1,5 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 const TABS = [
   { key: "home", label: "Home", icon: require("../assets/icons/home.png") },
@@ -6,13 +7,19 @@ const TABS = [
   { key: "settings", label: "Settings", icon: require("../assets/icons/setting.png") },
 ];
 
+const NAV_BAR_HEIGHT = 80;
+
 const BottomNavBar = (
-    { activeTab = "home", onTabPress }: {
+    { activeTab = "home", 
+      onTabPress 
+    }: {
         activeTab?: string;
         onTabPress?: (tabKey: string) => void;
 }) => {
+  const insets = useSafeAreaInsets();
+
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, { paddingBottom: Math.max(insets.bottom, 12) }]}>
       {TABS.map((tab) => {
         const isActive = tab.key === activeTab;
         return (
@@ -49,7 +56,7 @@ const BottomNavBar = (
 
 const styles = StyleSheet.create({
   container: {
-    height: 80,
+    height: NAV_BAR_HEIGHT,
     backgroundColor: "#17192A",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -92,4 +99,5 @@ const styles = StyleSheet.create({
   },
 });
 
+export { NAV_BAR_HEIGHT };
 export default BottomNavBar;

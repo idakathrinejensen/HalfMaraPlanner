@@ -3,8 +3,6 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ActivityIndicator } from "react-native-paper";
 import React, { useState } from "react";
 import * as Location from "expo-location";
-
-//import BottomNavBar from "../components/BottomNavBar";
 import { useNavigation } from "@react-navigation/native";
 
 import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";

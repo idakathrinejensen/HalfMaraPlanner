@@ -6,16 +6,62 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
 
 const Calender = () => {
+  const [sections, setSections] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
   );
+
+  useEffect(() => {
+    const fetchTrainingPlan = async () => {
+      try {
+        const res = await fetch(
+          "http://192.168.1.42:3000/api/training-plan?raceDate=2026-04-01&level=beginner&weeks=8"
+        );
+
+        if (!res.ok) {
+          throw new Error("Failed to fetch training plan");
+        }
+
+        const plan = await res.json();
+
+        const getIcon = (iconName: string) => {
+          switch (iconName) {
+            case "green.png":
+              return require("../assets/images/Icons/green.png");
+            case "grey.png":
+              return require("../assets/images/Icons/grey.png");
+            case "yellow.png":
+              return require("../assets/images/Icons/yellow.png");
+            case "red.png":
+              return require("../assets/images/Icons/red.png");
+          }
+        };
+
+        const formattedSections = plan.map((section: any) => ({
+          title: section.title,
+          data: section.data.map((item: any) => ({
+            date: item.date,
+            description: item.description,
+            time: item.time,
+            image: getIcon(item.image),
+          })),
+        }));
+
+        setSections(formattedSections);
+      } catch (err) {
+        console.error("Error loading training plan:", err);
+      } 
+    };
+
+    fetchTrainingPlan();
+  }, []);
 
   type Item = {
     image: ImageSourcePropType;
@@ -49,42 +95,7 @@ const Calender = () => {
       />
     </View>
   );
-
-  const sections = [
-    {
-      title: "Week 1",
-      data: [
-        {
-          date: "Wed, Nov 26",
-          description: "Rest",
-          image: require("../assets/images/Icons/green.png"),
-        },
-        {
-          date: "Thu, Nov 27",
-          description: "Easy - 5 km",
-          image: require("../assets/images/Icons/grey.png"),
-          time: "30 minutes",
-        },
-      ],
-    },
-    {
-      title: "Week 2",
-      data: [
-        {
-          date: "Wed, Nov 28",
-          description: "Rest",
-          image: require("../assets/images/Icons/green.png"),
-        },
-        {
-          date: "Thu, Nov 30",
-          description: "Easy - 5 km",
-          image: require("../assets/images/Icons/grey.png"),
-          time: "30 minutes",
-        },
-      ],
-    },
-  ];
-
+  
   return (
     <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
       <Appbar.Header style={styles.appBar}>
@@ -147,7 +158,7 @@ const styles = StyleSheet.create({
     height: 60,
     marginBottom: 28,
     paddingBottom: 15,
-    borderBottomWidth: 1,       
+    borderBottomWidth: 1,
     borderBottomColor: "#6B7280",
   },
   backButton: {

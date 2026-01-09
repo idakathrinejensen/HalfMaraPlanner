@@ -8,7 +8,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   // Handle login button press
   const handleLogin = async () => {
@@ -35,7 +35,7 @@ export default function Login() {
     }
 
     // Navigate to Home screen on successful login
-    navigation.navigate('Home' as never);
+    navigation.replace("MainTabs");
 
   } catch (error) {
     console.log(error);

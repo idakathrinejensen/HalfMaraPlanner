@@ -16,7 +16,7 @@ export default function Register() {
     duration: '',
     raceDate: '',
   });
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   function updateUserData(newFields: Partial<typeof userData>) {
     setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data

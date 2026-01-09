@@ -12,10 +12,7 @@ import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
 
-import { useNavigation } from "@react-navigation/native";
-
 const Calender = () => {
-  const navigation = useNavigation<any>();
 
   const [sections, setSections] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(

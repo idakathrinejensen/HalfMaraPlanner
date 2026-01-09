@@ -9,7 +9,7 @@ const Settings = () => {
 
   return (
     <View style={styles.root}>
-      <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
+      <SafeAreaView style={styles.background} edges={["left", "right"]}>
         <ScrollView
           style={styles.background}
           contentContainerStyle={styles.contentContainer}
@@ -103,7 +103,10 @@ const Settings = () => {
             activeOpacity={0.85}
             style={styles.logoutButton}
             onPress={() => {
-              navigation.navigate("Login");
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Login" }],
+              });
             }}
           >
             <Text style={styles.logoutText}>Log Out</Text>

@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AuthProvider } from './context/AuthContext';
 
 import Calender from './Calender';
 import Register from './Register';
@@ -50,7 +51,7 @@ function MainTabs() {
 
 export default function App() {
   return (
-
+    <AuthProvider>
     <SafeAreaProvider>
         <Stack.Navigator 
         screenOptions={{ 
@@ -62,6 +63,6 @@ export default function App() {
           <Stack.Screen name="Register" component={Register} />
         </Stack.Navigator>
     </SafeAreaProvider>
-
+    </AuthProvider>
   );
 }

@@ -38,13 +38,13 @@ const Calender = () => {
         const getIcon = (iconName: string) => {
           switch (iconName) {
             case "green.png":
-              return require("../assets/images/Icons/green.png");
+              return require("../assets/icons/green.png");
             case "grey.png":
-              return require("../assets/images/Icons/grey.png");
+              return require("../assets/icons/grey.png");
             case "yellow.png":
-              return require("../assets/images/Icons/yellow.png");
+              return require("../assets/icons/yellow.png");
             case "red.png":
-              return require("../assets/images/Icons/red.png");
+              return require("../assets/icons/red.png");
           }
         };
 

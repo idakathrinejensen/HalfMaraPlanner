@@ -2,6 +2,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { AuthProvider} from './app/context/AuthContext'
 
 import Calender from './screens/Calender';
 import Register from './screens/Register';
@@ -49,7 +50,7 @@ function MainTabs() {
 
 export default function App() {
   return (
-
+    <AuthProvider>
     <SafeAreaProvider>
       <NavigationContainer>
         <Stack.Navigator 
@@ -65,6 +66,6 @@ export default function App() {
         </Stack.Navigator>
       </NavigationContainer>
     </SafeAreaProvider>
-
+    </AuthProvider>
   );
 }

@@ -3,8 +3,7 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../firebaseConfig';
+import {SafeAreaView} from 'react-native-safe-area-context';
 
 export default function Login() {
   const [email, setEmail] = useState('');
@@ -20,12 +19,23 @@ export default function Login() {
   }
 
   try {
-  // Attempt to sign in the user (Firabase)
-    await signInWithEmailAndPassword(auth, email, password);
-    console.log('Logging in with:', email);
+    const response = await fetch('http://localhost:3000/user/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }),
+    });
 
-    // Navigate to HomeScreen on successful login
-    navigation.navigate('HomeScreen' as never);
+    const data = await response.json();
+
+    if (!response.ok || !data.success) {
+      alert(data.message || 'Login failed. Please try again.');
+      return;
+    }
+
+    // Navigate to Home screen on successful login
+    navigation.navigate('Home' as never);
 
   } catch (error) {
     console.log(error);
@@ -35,7 +45,7 @@ export default function Login() {
 
   // Render login form
   return (
-    <View style={{
+    <SafeAreaView style={{
       flex: 1,
       backgroundColor: '#0f172a',
       alignItems: 'center',
@@ -132,6 +142,6 @@ export default function Login() {
           Don’t have an account? Sign up
         </Text>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

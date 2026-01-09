@@ -420,11 +420,13 @@ export default function Register() {
                   return;
                 }
 
-                alert("Account created!");
-                navigation.navigate("HomeScreen" as never);
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "MainTabs" as never }],
+                });
               } catch (err) {
                 console.log(err);
-                alert("Failed to connect to backend.");
+                alert("There was an error");
               }
             }}
             style={{

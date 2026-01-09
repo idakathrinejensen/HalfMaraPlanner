@@ -11,7 +11,6 @@ import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation<any>();
   const { user } = useAuth();
 
   // pre-run tips states

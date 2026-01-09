@@ -99,6 +99,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
         date: fd,
         description: "Rest",
         image: ICONS.rest,
+        complete: false, 
       });
     } else if (d === 1 || d === 4) {
       const mins = easyDistance * PACE[level];
@@ -107,6 +108,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
         description: `Easy - ${easyDistance} km`,
         image: ICONS.easy,
         time: fmtTimeFromMinutes(mins),
+        complete: false,
       });
     } else if (d === 2) {
       const mins = tempoDistance * PACE[level] * 0.95; // tempo slightly faster
@@ -115,6 +117,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
         description: `Tempo - ${tempoDistance} km`,
         image: ICONS.tempo,
         time: fmtTimeFromMinutes(mins),
+        complete: false,
       });
     }  else if (d === 6) {
       const mins = longDistance * PACE[level];
@@ -123,6 +126,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
         description: `Long - ${longDistance} km`,
         image: ICONS.long,
         time: fmtTimeFromMinutes(mins),
+        complete: false,
       });
     }
   }

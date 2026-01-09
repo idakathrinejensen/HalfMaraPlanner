@@ -109,7 +109,6 @@ function registerUser(req, res) {
       weeks: duration,
       raceDate,
       sections: plan,
-      generatedAt: new Date().toISOString(),
     };
   }
 
@@ -150,5 +149,37 @@ function getTrainingPlan(req, res) {
     return res.status(500).json({ success: false, message: "Server error" });
   }
 }
+function markWorkoutComplete(req, res) {
+  const userId = Number(req.params.id); // user id from URL
+  const { weekIndex, dayIndex } = req.body; // indices of the workout
 
-module.exports = { loginUser, registerUser, getTrainingPlan};
+  if (isNaN(userId) || weekIndex === undefined || dayIndex === undefined) {
+    return res.status(400).json({ success: false, message: "Invalid parameters" });
+  }
+
+  try {
+    const data = readDb();
+    const user = data.users.find(u => u.id === userId);
+    if (!user || !user.trainingPlan) {
+      return res.status(404).json({ success: false, message: "User or plan not found" });
+    }
+
+    const week = user.trainingPlan.sections[weekIndex];
+    if (!week || !week.data[dayIndex]) {
+      return res.status(404).json({ success: false, message: "Workout not found" });
+    }
+
+    // Mark as complete
+    week.data[dayIndex].complete = true;
+
+    // Save DB
+    writeDb(data);
+
+    return res.json({ success: true, workout: week.data[dayIndex] });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ success: false, message: "Server error" });
+  }
+}
+
+module.exports = { loginUser, registerUser, getTrainingPlan, markWorkoutComplete};

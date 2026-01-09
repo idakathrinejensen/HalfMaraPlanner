@@ -4,51 +4,53 @@ import {
   Image,
   SectionList,
   StyleSheet,
-  TouchableOpacity,
 } from "react-native";
 import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
-
+import { useAuth } from "./context/AuthContext";
 import { useNavigation } from "@react-navigation/native";
 
 const Calender = () => {
-  const navigation = useNavigation<any>();
-
   const [sections, setSections] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
   );
+  const navigation = useNavigation<any>();
+  const { user } = useAuth();
+
 
   useEffect(() => {
+    if (!user) return;
     const fetchTrainingPlan = async () => {
       try {
         const res = await fetch(
-          "http://192.168.1.42:3000/api/training-plan?raceDate=2026-04-01&level=beginner&weeks=8"
+          `http://192.168.1.42:3000/api/users/${user.id}/training-plan`
         );
 
         if (!res.ok) {
           throw new Error("Failed to fetch training plan");
         }
 
-        const plan = await res.json();
+        const json = await res.json();
+        const planSections = json.trainingPlan.sections;
 
-        const getIcon = (iconName: string) => {
+     const getIcon = (iconName: string) => {
           switch (iconName) {
             case "green.png":
               return require("../assets/icons/green.png");
             case "grey.png":
               return require("../assets/icons/grey.png");
-            case "yellow.png":
-              return require("../assets/icons/orange.png");
             case "orange.png":
+              return require("../assets/icons/orange.png");
+            case "purple.png":
               return require("../assets/icons/purple.png");
           }
         };
 
-        const formattedSections = plan.map((section: any) => ({
+        const formattedSections = planSections.map((section: any) => ({
           title: section.title,
           data: section.data.map((item: any) => ({
             date: item.date,
@@ -65,7 +67,7 @@ const Calender = () => {
     };
 
     fetchTrainingPlan();
-  }, []);
+  }, [user]);
 
   type Item = {
     image: ImageSourcePropType;

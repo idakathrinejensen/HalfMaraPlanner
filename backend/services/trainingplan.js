@@ -18,8 +18,8 @@ function getStartDateFromRace(raceDateStr, weeks) {
 const ICONS = {
   rest: "green.png",
   easy: "grey.png",
-  tempo: "yellow.png",
-  long: "red.png",
+  tempo: "orange.png",
+  long: "purple.png",
 };
 
 //Estimated starting pace for the different groups

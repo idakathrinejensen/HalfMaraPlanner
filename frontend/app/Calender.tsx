@@ -42,9 +42,9 @@ const Calender = () => {
             case "grey.png":
               return require("../assets/icons/grey.png");
             case "yellow.png":
-              return require("../assets/icons/yellow.png");
-            case "red.png":
-              return require("../assets/icons/red.png");
+              return require("../assets/icons/orange.png");
+            case "orange.png":
+              return require("../assets/icons/purple.png");
           }
         };
 

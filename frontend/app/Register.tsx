@@ -4,6 +4,7 @@ import { Pressable, Text, TextInput, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Register() {
   const [step, setStep] = useState<number>(1);
@@ -18,11 +19,12 @@ export default function Register() {
   const navigation = useNavigation();
 
   function updateUserData(newFields: Partial<typeof userData>) {
-  setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data
-}
+    setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data
+  }
 
+  // SAfee area view for notches etc 
   return (
-    <View style={{
+    <SafeAreaView style={{
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
@@ -37,17 +39,17 @@ export default function Register() {
         padding: 20,
       }}>
         {step === 1 && (
-          <CreateAccount 
-            onNext={() => setStep(2)} 
-            updateUserData={updateUserData} 
+          <CreateAccount
+            onNext={() => setStep(2)}
+            updateUserData={updateUserData}
           />
         )}
-        {step === 2 && 
-          <Experience 
+        {step === 2 &&
+          <Experience
             onBack={() => setStep(1)}
-            onNext={() => setStep(3)} 
+            onNext={() => setStep(3)}
             updateUserData={updateUserData}
-            />}
+          />}
         {step === 3 && (
           <TrainingPlan
             onBack={() => setStep(2)}
@@ -56,9 +58,9 @@ export default function Register() {
           />
         )}
       </View>
-    </View>
+    </SafeAreaView>
 
-  )
+  );
 
 
   // Step 1
@@ -72,7 +74,7 @@ export default function Register() {
       emailRegex.test(email.toLowerCase().trim()) &&  // valid email format
       password.length >= 6 && // at least 6 characters
       /\d/.test(password); // at least one number
-    
+
 
     return (
       <View style={{ gap: 16 }}>
@@ -136,13 +138,13 @@ export default function Register() {
         <Pressable
           onPress={() => {
             if (!isValid) return;
-            
+
             updateUserData({
               fullName,
               email,
               password,
             });
-            onNext();  
+            onNext();
           }}
           style={{
             backgroundColor: isValid ? '#8B80F9' : '#475569',
@@ -242,14 +244,14 @@ export default function Register() {
           </Pressable>
 
           <Pressable
-             onPress={() => {
-            if (!isValid) return;
-            
-            updateUserData({
-              experienceLevel,
-            });
-            onNext();  
-          }}
+            onPress={() => {
+              if (!isValid) return;
+
+              updateUserData({
+                experienceLevel,
+              });
+              onNext();
+            }}
 
             style={{
               flex: 1,
@@ -269,7 +271,7 @@ export default function Register() {
 
 
   // Step 3
-    function TrainingPlan({ onBack, onSubmit, updateUserData }: { onBack: () => void; onSubmit: () => void; updateUserData: (data: any) => void }) {
+  function TrainingPlan({ onBack, onSubmit, updateUserData }: { onBack: () => void; onSubmit: () => void; updateUserData: (data: any) => void }) {
 
     const [open, setOpen] = useState(false);
     const [duration, setDuration] = useState<string>('12');
@@ -281,8 +283,8 @@ export default function Register() {
       { label: '20 weeks', value: '20' },
     ]);
     const [raceDate, setRaceDate] = useState<string>('');
-    const [openDatePicker, setOpenDatePicker] = useState(false); 
-    const [selectedDate, setSelectedDate] = useState(new Date()); 
+    const [openDatePicker, setOpenDatePicker] = useState(false);
+    const [selectedDate, setSelectedDate] = useState(new Date());
     const isValid = duration !== '' && raceDate !== '';
 
     return (
@@ -299,7 +301,7 @@ export default function Register() {
 
         {/* FORM FIELDS */}
         <Text style={{ color: 'white', fontSize: 16, fontWeight: '600' }}>Training Duration (weeks)</Text>
-        <View style={{ zIndex: 1000 }}> 
+        <View style={{ zIndex: 1000 }}>
           <DropDownPicker
             open={open}
             value={duration}
@@ -393,17 +395,38 @@ export default function Register() {
           </Pressable>
 
           <Pressable
-              onPress={() => {
-                if (!isValid) return;
-                
-                updateUserData({
-                  duration,
-                  raceDate,
+            onPress={async () => {
+              if (!isValid) return;
+
+              updateUserData({ duration, raceDate });
+
+              const payload = {
+                ...userData,
+                duration,
+                raceDate,
+              };
+
+              try {
+                const res = await fetch("http://localhost:3000/user/register", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(payload),
                 });
-                onSubmit();  
-                navigation.navigate('HomeScreen' as never); // Navigate to HomeScreen
+
+                const data = await res.json();
+
+                if (!data.success) {
+                  alert(data.message);
+                  return;
+                }
+
+                alert("Account created!");
+                navigation.navigate("HomeScreen" as never);
+              } catch (err) {
+                console.log(err);
+                alert("Failed to connect to backend.");
               }
-            }
+            }}
             style={{
               flex: 1,
               backgroundColor: isValid ? '#8B80F9' : '#475569',

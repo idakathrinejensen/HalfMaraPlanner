@@ -21,6 +21,9 @@ app.get("/", (req, res) => {
 const weatherRoute = require("./routes/weatherRoute");
 app.use("/weather", weatherRoute);
 
+// user route
+const userRoute = require("./routes/userRoute");
+app.use("/user", userRoute);
 // basic error handler (so errors return JSON)
 app.use((err, req, res, next) => {
   const status = err.status || 500;

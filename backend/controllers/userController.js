@@ -101,6 +101,18 @@ function registerUser(req, res) {
     raceDate
   };
 
+  if (experienceLevel && duration && raceDate) {
+    const plan = generateHalfMarathonPlan(raceDate, experienceLevel, duration);
+
+    newUser.trainingPlan = {
+      level: experienceLevel,
+      weeks: duration,
+      raceDate,
+      sections: plan,
+      generatedAt: new Date().toISOString(),
+    };
+  }
+
   // Add to array
   data.users.push(newUser);
 
@@ -113,52 +125,6 @@ function registerUser(req, res) {
 
   const { password: _pw, ...safeUser } = newUser;
   return res.json({ success: true, user: safeUser });
-}
-
-function saveTrainingPlan(req, res) {
-  const userId = Number(req.params.id);
-
-  try {
-    const data = readDb();
-    const user = data.users.find((u) => u.id === userId);
-
-    if (!user) {
-      return res.status(404).json({ success: false, message: "User not found" });
-    }
-
-  const { experienceLevel, duration, raceDate } = user;
-
-  if (!experienceLevel || !duration || !raceDate) {
-    return res.status(400).json({
-      success: false,
-      message: "experienceLevel, duration and raceDate are required",
-    });
-  }
-    // Generate the trainingplan
-    const plan = generateHalfMarathonPlan(
-      raceDate,
-      experienceLevel,
-      duration
-    );
-
-    // Save traininplan to user
-    user.trainingPlan = {
-      level: experienceLevel,
-      weeks: duration,
-      raceDate,
-      sections: plan,
-    };
-
-    // Update the db
-    writeDb(data);
-    return res.json({
-      success: true,
-      trainingPlan: user.trainingPlan,
-    });
-  } catch (err) {
-    console.error(err);
-    return res.status(500).json({ success: false, message: "Server error" });
-  }
 }
 
 function getTrainingPlan(req, res) {
@@ -185,4 +151,4 @@ function getTrainingPlan(req, res) {
   }
 }
 
-module.exports = { loginUser, registerUser, saveTrainingPlan, getTrainingPlan};
+module.exports = { loginUser, registerUser, getTrainingPlan};

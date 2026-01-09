@@ -1,5 +1,558 @@
 {
   "users": [
-    
+    {
+      "id": 1767973843049,
+      "fullName": "Stine Derror",
+      "email": "stinederror@gmail.com",
+      "password": "hej12345",
+      "experienceLevel": "beginner",
+      "duration": "12",
+      "raceDate": "2026-04-02"
+    },
+    {
+      "id": 1767975016263,
+      "fullName": "Idapigen",
+      "email": "idapigen@mail.dk",
+      "password": "hj123456",
+      "experienceLevel": "intermediate",
+      "duration": "12",
+      "raceDate": "2026-04-02",
+      "trainingPlan": {
+        "level": "intermediate",
+        "weeks": "12",
+        "raceDate": "2026-04-02",
+        "sections": [
+          {
+            "title": "Week 1",
+            "data": [
+              {
+                "date": "Thu, Jan 8",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Jan 9",
+                "description": "Easy - 4 km",
+                "image": "grey.png",
+                "time": "22 minutes"
+              },
+              {
+                "date": "Sat, Jan 10",
+                "description": "Tempo - 4 km",
+                "image": "orange.png",
+                "time": "21 minutes"
+              },
+              {
+                "date": "Sun, Jan 11",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Jan 12",
+                "description": "Easy - 4 km",
+                "image": "grey.png",
+                "time": "22 minutes"
+              },
+              {
+                "date": "Tue, Jan 13",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Jan 14",
+                "description": "Long - 10 km",
+                "image": "purple.png",
+                "time": "55 minutes"
+              }
+            ]
+          },
+          {
+            "title": "Week 2",
+            "data": [
+              {
+                "date": "Thu, Jan 15",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Jan 16",
+                "description": "Easy - 4 km",
+                "image": "grey.png",
+                "time": "22 minutes"
+              },
+              {
+                "date": "Sat, Jan 17",
+                "description": "Tempo - 4 km",
+                "image": "orange.png",
+                "time": "21 minutes"
+              },
+              {
+                "date": "Sun, Jan 18",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Jan 19",
+                "description": "Easy - 4 km",
+                "image": "grey.png",
+                "time": "22 minutes"
+              },
+              {
+                "date": "Tue, Jan 20",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Jan 21",
+                "description": "Long - 12 km",
+                "image": "purple.png",
+                "time": "1 hr 6 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 3",
+            "data": [
+              {
+                "date": "Thu, Jan 22",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Jan 23",
+                "description": "Easy - 5 km",
+                "image": "grey.png",
+                "time": "28 minutes"
+              },
+              {
+                "date": "Sat, Jan 24",
+                "description": "Tempo - 5 km",
+                "image": "orange.png",
+                "time": "26 minutes"
+              },
+              {
+                "date": "Sun, Jan 25",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Jan 26",
+                "description": "Easy - 5 km",
+                "image": "grey.png",
+                "time": "28 minutes"
+              },
+              {
+                "date": "Tue, Jan 27",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Jan 28",
+                "description": "Long - 13 km",
+                "image": "purple.png",
+                "time": "1 hr 12 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 4",
+            "data": [
+              {
+                "date": "Thu, Jan 29",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Jan 30",
+                "description": "Easy - 4 km",
+                "image": "grey.png",
+                "time": "22 minutes"
+              },
+              {
+                "date": "Sat, Jan 31",
+                "description": "Tempo - 4 km",
+                "image": "orange.png",
+                "time": "21 minutes"
+              },
+              {
+                "date": "Sun, Feb 1",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Feb 2",
+                "description": "Easy - 4 km",
+                "image": "grey.png",
+                "time": "22 minutes"
+              },
+              {
+                "date": "Tue, Feb 3",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Feb 4",
+                "description": "Long - 12 km",
+                "image": "purple.png",
+                "time": "1 hr 6 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 5",
+            "data": [
+              {
+                "date": "Thu, Feb 5",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Feb 6",
+                "description": "Easy - 6 km",
+                "image": "grey.png",
+                "time": "33 minutes"
+              },
+              {
+                "date": "Sat, Feb 7",
+                "description": "Tempo - 6 km",
+                "image": "orange.png",
+                "time": "31 minutes"
+              },
+              {
+                "date": "Sun, Feb 8",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Feb 9",
+                "description": "Easy - 6 km",
+                "image": "grey.png",
+                "time": "33 minutes"
+              },
+              {
+                "date": "Tue, Feb 10",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Feb 11",
+                "description": "Long - 16 km",
+                "image": "purple.png",
+                "time": "1 hr 28 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 6",
+            "data": [
+              {
+                "date": "Thu, Feb 12",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Feb 13",
+                "description": "Easy - 6 km",
+                "image": "grey.png",
+                "time": "33 minutes"
+              },
+              {
+                "date": "Sat, Feb 14",
+                "description": "Tempo - 6 km",
+                "image": "orange.png",
+                "time": "31 minutes"
+              },
+              {
+                "date": "Sun, Feb 15",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Feb 16",
+                "description": "Easy - 6 km",
+                "image": "grey.png",
+                "time": "33 minutes"
+              },
+              {
+                "date": "Tue, Feb 17",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Feb 18",
+                "description": "Long - 18 km",
+                "image": "purple.png",
+                "time": "1 hr 39 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 7",
+            "data": [
+              {
+                "date": "Thu, Feb 19",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Feb 20",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Sat, Feb 21",
+                "description": "Tempo - 6 km",
+                "image": "orange.png",
+                "time": "31 minutes"
+              },
+              {
+                "date": "Sun, Feb 22",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Feb 23",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Tue, Feb 24",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Feb 25",
+                "description": "Long - 18 km",
+                "image": "purple.png",
+                "time": "1 hr 39 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 8",
+            "data": [
+              {
+                "date": "Thu, Feb 26",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Feb 27",
+                "description": "Easy - 5 km",
+                "image": "grey.png",
+                "time": "28 minutes"
+              },
+              {
+                "date": "Sat, Feb 28",
+                "description": "Tempo - 6 km",
+                "image": "orange.png",
+                "time": "31 minutes"
+              },
+              {
+                "date": "Sun, Mar 1",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Mar 2",
+                "description": "Easy - 5 km",
+                "image": "grey.png",
+                "time": "28 minutes"
+              },
+              {
+                "date": "Tue, Mar 3",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Mar 4",
+                "description": "Long - 14 km",
+                "image": "purple.png",
+                "time": "1 hr 17 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 9",
+            "data": [
+              {
+                "date": "Thu, Mar 5",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Mar 6",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Sat, Mar 7",
+                "description": "Tempo - 7 km",
+                "image": "orange.png",
+                "time": "37 minutes"
+              },
+              {
+                "date": "Sun, Mar 8",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Mar 9",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Tue, Mar 10",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Mar 11",
+                "description": "Long - 18 km",
+                "image": "purple.png",
+                "time": "1 hr 39 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 10",
+            "data": [
+              {
+                "date": "Thu, Mar 12",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Mar 13",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Sat, Mar 14",
+                "description": "Tempo - 8 km",
+                "image": "orange.png",
+                "time": "42 minutes"
+              },
+              {
+                "date": "Sun, Mar 15",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Mar 16",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Tue, Mar 17",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Mar 18",
+                "description": "Long - 18 km",
+                "image": "purple.png",
+                "time": "1 hr 39 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 11",
+            "data": [
+              {
+                "date": "Thu, Mar 19",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Mar 20",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Sat, Mar 21",
+                "description": "Tempo - 8 km",
+                "image": "orange.png",
+                "time": "42 minutes"
+              },
+              {
+                "date": "Sun, Mar 22",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Mar 23",
+                "description": "Easy - 7 km",
+                "image": "grey.png",
+                "time": "39 minutes"
+              },
+              {
+                "date": "Tue, Mar 24",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Mar 25",
+                "description": "Long - 18 km",
+                "image": "purple.png",
+                "time": "1 hr 39 min"
+              }
+            ]
+          },
+          {
+            "title": "Week 12",
+            "data": [
+              {
+                "date": "Thu, Mar 26",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Fri, Mar 27",
+                "description": "Easy - 5 km",
+                "image": "grey.png",
+                "time": "28 minutes"
+              },
+              {
+                "date": "Sat, Mar 28",
+                "description": "Tempo - 6 km",
+                "image": "orange.png",
+                "time": "31 minutes"
+              },
+              {
+                "date": "Sun, Mar 29",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Mon, Mar 30",
+                "description": "Easy - 5 km",
+                "image": "grey.png",
+                "time": "28 minutes"
+              },
+              {
+                "date": "Tue, Mar 31",
+                "description": "Rest",
+                "image": "green.png"
+              },
+              {
+                "date": "Wed, Apr 1",
+                "description": "Long - 14 km",
+                "image": "purple.png",
+                "time": "1 hr 17 min"
+              }
+            ]
+          }
+        ],
+        "generatedAt": "2026-01-09T16:10:16.301Z"
+      }
+    }
   ]
 }

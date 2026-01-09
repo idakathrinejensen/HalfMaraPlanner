@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import { useAuth } from './context/AuthContext';
+import { useAuth } from "../context/AuthContext"
 
 
 export default function Login() {

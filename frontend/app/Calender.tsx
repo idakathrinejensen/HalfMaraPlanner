@@ -12,7 +12,11 @@ import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
 
+import { useNavigation } from "@react-navigation/native";
+
 const Calender = () => {
+  const navigation = useNavigation<any>();
+
   const [sections, setSections] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
@@ -97,14 +101,9 @@ const Calender = () => {
   );
   
   return (
+    <View style={styles.root}>
     <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
       <Appbar.Header style={styles.appBar}>
-        <TouchableOpacity
-          style={styles.backButton}
-          onPress={() => console.log("Back pressed")}
-        >
-          <Text style={styles.backArrow}>←</Text>
-        </TouchableOpacity>
         <Appbar.Content
           title="Training Calendar"
           titleStyle={{
@@ -137,19 +136,19 @@ const Calender = () => {
         )}
       />
     </SafeAreaView>
+    </View>
   );
 };
 
 export default Calender;
 
 const styles = StyleSheet.create({
+  root: {
+    flex: 1,
+    backgroundColor: "#00171F", // screen background
+  },
   background: {
     flex: 1,
-    backgroundColor: "#00171F",
-  },
-  backArrow: {
-    fontSize: 20,
-    color: "#FFF",
   },
   appBar: {
     backgroundColor: "#00000000",

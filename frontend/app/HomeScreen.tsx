@@ -1,10 +1,61 @@
 import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { ActivityIndicator } from "react-native-paper";
+import React, { useState } from "react";
+import * as Location from "expo-location";
+import { useNavigation } from "@react-navigation/native";
 
-import BottomNavBar from "../components/BottomNavBar";
+import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";
+import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
+  const navigation = useNavigation<any>();
+
+  // pre-run tips states
+  const [tipsVisible, setTipsVisible] = useState(false);
+  const [weather, setWeather] = useState<WeatherDTO | null>(null);
+  const [tips, setTips] = useState<Tips | null>(null);
+  const [loadingTips, setLoadingTips] = useState(false);
+  const [tipsError, setTipsError] = useState<string | null>(null);
+
+  // completed state
+  const [workoutCompleted, setWorkoutCompleted] = useState(false);
+   
+  async function onPressPreRunTips() {
+  try {
+    setLoadingTips(true);
+    setTipsError(null);
+
+    const { status } = await Location.requestForegroundPermissionsAsync();
+    if (status !== "granted") {
+      throw new Error("Location permission denied");
+    }
+
+    const pos = await Location.getCurrentPositionAsync({});
+    const { latitude, longitude } = pos.coords;
+
+    const w = await fetchWeatherByCoords(latitude, longitude);
+
+    // Fixed city; later replace with user's location/city setting
+    //const w = await fetchWeatherByCity("Milan");
+    
+    setWeather(w);
+    setTips(generateTips(w));
+    setTipsVisible(true);
+  } catch (e: any) {
+    setTipsError(e?.message ?? "Could not load tips.");
+  } finally {
+    setLoadingTips(false);
+  }
+}
+
+function onPressMarkAsComplete() {
+  setWorkoutCompleted(true);
+  setTipsVisible(false); // hide pre-run tips
+}
+
+
     return(
       <View style={styles.root}>   
         <SafeAreaView 
@@ -23,12 +74,6 @@ const HomeScreen = () => {
                     <Text style={styles.greeting}>Good morning,</Text>
                     <Text style={styles.name}>Leonardo da Vinci</Text>
                 </View>
-                <TouchableOpacity style={styles.settingsButton}>
-                  <Image
-                    source={require("../assets/icons/setting.png")}
-                    resizeMode="contain"
-                    />
-                    </TouchableOpacity>
                 </View>
 
                 {/* training progress */}
@@ -39,7 +84,7 @@ const HomeScreen = () => {
                           <Text style={styles.progressSubLabel}>Week 1 of 12</Text>
                       </View>
 
-                      <View style={{ alignItems: "flex-end" }}> {/*right align */}
+                      <View style={{ alignItems: "flex-end" }}>
                           <Text style={styles.progressPercent}>0%</Text>
                           <Text style={styles.progressRuns}>0/84 runs</Text>
                       </View>
@@ -56,20 +101,113 @@ const HomeScreen = () => {
             </View>
 
             <View style={styles.todayCard}>
+              {workoutCompleted ? (
+                <View style={styles.completedPill}>
+                <Text style={styles.completedPillText}>✓ Completed</Text>
+                </View>
+              ) : null}
               <View style={{marginBottom:24}}>
                 <Text style={styles.todayType}>REST RUN</Text>
                 <Text style={styles.todayDistance}>5 km</Text>
                 <Text style={styles.todayTime}>24 minutes</Text>
               </View>
 
-              <TouchableOpacity style={styles.primaryButton}>
-                <Text style={styles.primaryButtonText}>Get Pre-Run Tips</Text>
+              <TouchableOpacity 
+              style={styles.primaryButton}
+              onPress={() => {
+                if (tipsVisible) setTipsVisible(false);
+                else onPressPreRunTips();
+              }}
+              disabled={loadingTips || workoutCompleted}
+              >
+                {loadingTips ? (
+                  <ActivityIndicator/>
+                ) : (
+                <Text style={styles.primaryButtonText}>
+                  {workoutCompleted ? "Workout Completed" : tipsVisible ? "Hide Tips" : "Get Pre-Run Tips"}
+                  </Text>
+                )}
               </TouchableOpacity>
 
-              <TouchableOpacity style={styles.secondaryButton}>
-                <Text style={styles.secondaryButtonText}>Mark as Complete</Text>
+              <TouchableOpacity 
+                style={[styles.secondaryButton, workoutCompleted && styles.secondaryButtonCompleted]}
+                onPress={onPressMarkAsComplete}
+                disabled={workoutCompleted}
+                >
+                <Text style={styles.secondaryButtonText}>
+                  {workoutCompleted ? "Completed" : "Mark as Complete"}
+                  </Text>
               </TouchableOpacity>
             </View>
+
+            {/* Completed run text*/}
+              {workoutCompleted ? (
+                <View style={styles.completedCard}>
+                  <Text style={styles.completedTitle}>Great job completing your run!</Text>
+
+                  <Text style={styles.completedSubtitle}>Don't forget to:</Text>
+
+                  <Text style={styles.completedBullet}>• Stretch for 10–15 minutes</Text>
+                  <Text style={styles.completedBullet}>• Hydrate and refuel</Text>
+                  <Text style={styles.completedBullet}>• Log how you felt during the run</Text>
+                </View>
+              ) : null}
+
+          {tipsError ? <Text style={styles.errorText}>{tipsError}</Text> : null}
+
+          {tipsVisible && weather && tips ? (
+            <>
+              {/* Current Weather */}
+              <View style={styles.infoCard}>
+                <Text style={styles.infoCardTitle}>Current Weather</Text>
+
+                <View style={styles.infoRow}>
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.infoLabel}>Temperature</Text>
+                    <Text style={styles.infoValue}>{weather.temperatureC}°C</Text>
+                  </View>
+
+                  <View style={{ flex: 1 }}>
+                    <Text style={styles.infoLabel}>Conditions</Text>
+                    <Text style={styles.infoValue}>{weather.condition}</Text>
+                  </View>
+                </View>
+
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoMeta}>💧 {weather.humidity}%</Text>
+                  <Text style={styles.infoMeta}>💨 {weather.windSpeedKmh} km/h</Text>
+                  <Text style={styles.infoMeta}>
+                    🌧️ {weather.precipitationProbability ?? 0}%
+                  </Text>
+                </View>
+
+                {/* optional extra line if you want */}
+                {weather.rainMmLastHour > 0 ? (
+                  <Text style={styles.infoMeta}>Rain last hour: {weather.rainMmLastHour} mm</Text>
+                ) : null}
+              </View>
+
+              {/* Clothing */}
+              <View style={styles.tipCard}>
+                <Text style={styles.tipTitle}>Clothing</Text>
+                <Text style={styles.tipText}>{tips.Clothing}</Text>
+              </View>
+
+              {/* Hydration */}
+              <View style={styles.tipCard}>
+                <Text style={styles.tipTitle}>Hydration</Text>
+                <Text style={styles.tipText}>{tips.Hydration}</Text>
+              </View>
+
+              {/* Energy */}
+              <View style={styles.tipCard}>
+                <Text style={styles.tipTitle}>Energy</Text>
+                <Text style={styles.tipText}>{tips.Energy}</Text>
+              </View>
+            </>
+          ) : null}
+
+
 
             {/* upcoming runs */}
             <View style={styles.sectionHeaderRow}>
@@ -96,13 +234,6 @@ const HomeScreen = () => {
             </View>
           </ScrollView>
         </SafeAreaView>
-        {/* bottom nav bar */}
-          <BottomNavBar
-            activeTab="home"
-            onTabPress={(tabKey) => {
-              console.log("Pressed tab:", tabKey); // later: use router.push("/calendar") etc.
-          }}
-        />
       </View>
     )
 };
@@ -121,6 +252,7 @@ const styles = StyleSheet.create({
     contentContainer: {
         paddingHorizontal: 24,
         paddingVertical: 24,
+        paddingBottom: 120,
     },
 
     //header
@@ -217,6 +349,7 @@ const styles = StyleSheet.create({
       backgroundColor: "rgba(139,128,249,0.1)", // 10% opacity
       padding: 24,
       marginBottom: 24,
+      position: "relative",
     },
     todayType: {
       color: "#FFFFFF",
@@ -259,6 +392,114 @@ const styles = StyleSheet.create({
       color: "#FFFFFF",
       fontSize: 16,
       fontWeight: "500",
+    },
+    errorText: {
+      color: "#FFFFFF", 
+      marginBottom: 12,
+    },
+
+    //completed
+    completedPill: {
+      position: "absolute",
+      top: 16,
+      right: 16,
+      backgroundColor: "rgba(255,255,255,0.85)",
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: 999,
+    },
+    completedPillText: {
+      color: "#00171F",
+      fontSize: 14,
+      fontWeight: "600",
+    },
+
+    secondaryButtonCompleted: {
+      backgroundColor: "rgba(255,255,255,0.08)",
+      borderColor: "rgba(255,255,255,0.25)",
+    },
+
+    completedCard: {
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.2)",
+      padding: 16,
+      marginBottom: 24,
+    },
+    completedTitle: {
+      color: "#FFF7D6",
+      fontSize: 16,
+      fontWeight: "700",
+      marginBottom: 12,
+    },
+    completedSubtitle: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "600",
+      marginBottom: 10,
+    },
+    completedBullet: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      lineHeight: 24,
+      marginBottom: 6,
+    },
+
+    // weather + tips cards
+    infoCard: {
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: "rgba(255, 255, 255, 0.1)",
+      padding: 16,
+      marginBottom: 12,
+    },
+    infoCardTitle: {
+    color: "#FFFFFF",
+    fontSize: 16,
+    fontWeight: "600",
+    marginBottom: 12,
+    },
+    infoRow: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      marginBottom: 10,
+    },
+    infoLabel: {
+      color: "rgba(255,255,255,0.7)",
+      fontSize: 14,
+      marginBottom: 4,
+    },
+    infoValue: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "500",
+    },
+    infoMeta: {
+      color: "#FFFFFF",
+      fontSize: 14,
+      marginRight: 12,
+    },
+    tipCard: {
+      backgroundColor: "rgba(255,255,255,0.05)",
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: "rgba(255,255,255,0.1)",
+      padding: 16,
+      marginBottom: 12,
+    },
+    tipTitle: {
+      color: "rgba(255,255,255,0.75)",
+      fontSize: 16,
+      fontWeight: "600",
+      marginBottom: 8,
+    },
+    tipText: {
+      color: "#FFFFFF",
+      fontSize: 16,
+      fontWeight: "500",
+      lineHeight: 22,
     },
 
     // upcoming runs

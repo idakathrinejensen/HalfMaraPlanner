@@ -1,9 +1,16 @@
+
 const express = require("express");
 const app = express();
 const port = 3000;
+const trainingPlanRoutes = require("./routes/trainingplan_route");
+
+
+require("dotenv").config(); // retrieving API key
 
 // Middleware to handle JSON
 app.use(express.json());
+//trainingPlan route
+app.use("/api/training-plan", trainingPlanRoutes);
 
 // Example route
 app.get("/", (req, res) => {
@@ -17,6 +24,13 @@ app.use("/weather", weatherRoute);
 // user route
 const userRoute = require("./routes/userRoute");
 app.use("/user", userRoute);
+// basic error handler (so errors return JSON)
+app.use((err, req, res, next) => {
+  const status = err.status || 500;
+  res.status(status).json({
+    error: err.message || "Server error",
+  });
+});
 
 // Start server
 app.listen(port, () => {

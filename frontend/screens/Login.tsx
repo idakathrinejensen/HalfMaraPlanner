@@ -41,7 +41,10 @@ export default function Login() {
     login(data.user);
     
     // Navigate to Home screen on successful login
-    navigation.replace("MainTabs");
+    navigation.reset({
+        index: 0,
+        routes: [{ name: "MainTabs" as never }],
+      });
 
   } catch (error) {
     console.log(error);

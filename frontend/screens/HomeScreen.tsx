@@ -4,12 +4,14 @@ import { ActivityIndicator } from "react-native-paper";
 import React, { useState } from "react";
 import * as Location from "expo-location";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
 import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";
 import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
+  const { user } = useAuth();
 
   // pre-run tips states
   const [tipsVisible, setTipsVisible] = useState(false);
@@ -71,7 +73,7 @@ function onPressMarkAsComplete() {
                 <View style={styles.headerRow}>
                   <View>
                     <Text style={styles.greeting}>Good morning,</Text>
-                    <Text style={styles.name}>Leonardo da Vinci</Text>
+                    <Text style={styles.name}>{user?.fullName ?? "Runner"}</Text>
                 </View>
                 </View>
 
@@ -84,8 +86,8 @@ function onPressMarkAsComplete() {
                       </View>
 
                       <View style={{ alignItems: "flex-end" }}>
+                          <View style={{height: 26}} />
                           <Text style={styles.progressPercent}>0%</Text>
-                          <Text style={styles.progressRuns}>0/84 runs</Text>
                       </View>
                       </View>
 
@@ -215,9 +217,6 @@ function onPressMarkAsComplete() {
             {/* upcoming runs */}
             <View style={styles.sectionHeaderRow}>
               <Text style={styles.sectionTitle}>Upcoming Runs</Text>
-              <TouchableOpacity>
-                <Text style={styles.linkText}>View All</Text>
-              </TouchableOpacity>
             </View>
 
             <View style={styles.runsList}>
@@ -503,13 +502,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: "500",
       lineHeight: 22,
-    },
-
-    // upcoming runs
-    linkText: {
-      color: "#8B80F9",
-      fontSize: 16,
-      fontWeight: "500",
     },
     runsList: {
       gap: 8,

@@ -14,6 +14,10 @@ app.get("/", (req, res) => {
 const weatherRoute = require("./routes/weatherRoute");
 app.use("/weather", weatherRoute);
 
+// user route
+const userRoute = require("./routes/userRoute");
+app.use("/user", userRoute);
+
 // Start server
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

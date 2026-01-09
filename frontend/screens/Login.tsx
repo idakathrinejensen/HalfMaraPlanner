@@ -10,7 +10,7 @@ import { useAuth } from './context/AuthContext';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
 
   const { login } = useAuth();
 
@@ -41,7 +41,7 @@ export default function Login() {
     login(data.user);
     
     // Navigate to Home screen on successful login
-    navigation.navigate('Home' as never);
+    navigation.replace("MainTabs");
 
   } catch (error) {
     console.log(error);

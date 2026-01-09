@@ -7,8 +7,6 @@ const TABS = [
   { key: "settings", label: "Settings", icon: require("../assets/icons/setting.png") },
 ];
 
-const NAV_BAR_HEIGHT = 80;
-
 const BottomNavBar = (
     { activeTab = "home", 
       onTabPress 
@@ -56,7 +54,7 @@ const BottomNavBar = (
 
 const styles = StyleSheet.create({
   container: {
-    height: NAV_BAR_HEIGHT,
+    height: 110,
     backgroundColor: "#17192A",
     flexDirection: "row",
     justifyContent: "space-around",
@@ -99,5 +97,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export { NAV_BAR_HEIGHT };
 export default BottomNavBar;

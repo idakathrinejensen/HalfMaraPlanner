@@ -1,13 +1,15 @@
+import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AuthProvider } from './context/AuthContext';
+import { AuthProvider} from './context/AuthContext'
 
-import Calender from './Calender';
-import Register from './Register';
-import Home from './HomeScreen';
-import Settings from './Settings';
-import BottomNavBar , { NAV_BAR_HEIGHT } from '../components/BottomNavBar';
+import Calender from './screens/Calender';
+import Register from './screens/Register';
+import Home from './screens/HomeScreen';
+import Settings from './screens/Settings';
+import Login from './screens/Login';
+import BottomNavBar from './components/BottomNavBar';
 
 
 const Tab = createBottomTabNavigator();
@@ -17,11 +19,8 @@ const Stack = createNativeStackNavigator();
 function MainTabs() {
   return(
     <Tab.Navigator
-      initialRouteName="Home"
       screenOptions={{ headerShown: false,
-        tabBarStyle: { height: NAV_BAR_HEIGHT + 20 },
       }}
-    
       tabBar={({ state, navigation}) =>{
         const routeKey = state.routes[state.index].name;
         return(
@@ -53,7 +52,9 @@ export default function App() {
   return (
     <AuthProvider>
     <SafeAreaProvider>
+      <NavigationContainer>
         <Stack.Navigator 
+        initialRouteName="Login"
         screenOptions={{ 
           animation: 'none', // no animation
           headerShown: false,
@@ -61,7 +62,9 @@ export default function App() {
         >
           <Stack.Screen name="MainTabs" component={MainTabs} />
           <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Login" component={Login} />
         </Stack.Navigator>
+      </NavigationContainer>
     </SafeAreaProvider>
     </AuthProvider>
   );

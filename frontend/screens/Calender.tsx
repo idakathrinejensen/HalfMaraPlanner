@@ -10,17 +10,17 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
-import { useAuth } from "./context/AuthContext";
+import { useAuth} from "../context/AuthContext"
 import { useNavigation } from "@react-navigation/native";
 
 const Calender = () => {
+
   const [sections, setSections] = useState<any[]>([]);
   const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
     {}
   );
   const navigation = useNavigation<any>();
   const { user } = useAuth();
-
 
   useEffect(() => {
     if (!user) return;

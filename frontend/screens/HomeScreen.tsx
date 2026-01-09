@@ -112,7 +112,9 @@ function onPressMarkAsComplete() {
                 <Text style={styles.todayTime}>24 minutes</Text>
               </View>
 
-              <TouchableOpacity 
+              {!workoutCompleted ? (
+                <>
+                <TouchableOpacity 
               style={styles.primaryButton}
               onPress={() => {
                 if (tipsVisible) setTipsVisible(false);
@@ -138,6 +140,8 @@ function onPressMarkAsComplete() {
                   {workoutCompleted ? "Completed" : "Mark as Complete"}
                   </Text>
               </TouchableOpacity>
+                </>
+              ) : null}
             </View>
 
             {/* Completed run text*/}

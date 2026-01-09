@@ -9,17 +9,11 @@ import { useEffect, useState } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
-import { CheckBox } from "react-native-elements";
 import { useAuth} from "../context/AuthContext"
-import { useNavigation } from "@react-navigation/native";
 
 const Calender = () => {
 
   const [sections, setSections] = useState<any[]>([]);
-  const [checkedItems, setCheckedItems] = useState<{ [key: string]: boolean }>(
-    {}
-  );
-  const navigation = useNavigation<any>();
   const { user } = useAuth();
 
   useEffect(() => {
@@ -27,7 +21,7 @@ const Calender = () => {
     const fetchTrainingPlan = async () => {
       try {
         const res = await fetch(
-          `http://192.168.1.42:3000/api/users/${user.id}/training-plan`
+          `http://localhost:3000/user/${user.id}/training-plan`
         );
 
         if (!res.ok) {
@@ -57,6 +51,7 @@ const Calender = () => {
             description: item.description,
             time: item.time,
             image: getIcon(item.image),
+            complete: item.complete,
           })),
         }));
 
@@ -74,15 +69,14 @@ const Calender = () => {
     date: string;
     description: string;
     time?: string;
+    complete: Boolean;
   };
 
   type ItemCardProps = {
     item: Item;
-    isChecked: boolean;
-    onCheck: (checked: boolean) => void;
   };
 
-  const ItemCard = ({ item, isChecked, onCheck }: ItemCardProps) => (
+  const ItemCard = ({ item }: ItemCardProps) => (
     <View style={styles.card}>
       <Image source={item.image} style={styles.image} />
       <View style={styles.textContainer}>
@@ -90,15 +84,11 @@ const Calender = () => {
         <Text style={styles.text}>{item.description}</Text>
         <Text style={styles.time}>{item.time}</Text>
       </View>
-      <CheckBox
-        checked={isChecked}
-        onPress={() => onCheck(!isChecked)}
-        iconType="material"
-        checkedIcon="radio-button-checked"
-        uncheckedIcon="radio-button-unchecked"
-        checkedColor="#8B80F9"
-        uncheckedColor="#6B7280"
-      />
+    {item.complete ? (
+    <View style={styles.completedPill}>
+      <Text style={styles.completedPillText}>✓ Completed</Text>
+    </View>
+  ) : null}
     </View>
   );
   
@@ -119,16 +109,9 @@ const Calender = () => {
       <SectionList
         sections={sections}
         keyExtractor={(item, index) => item.date + index}
-        renderItem={({ item, index }) => (
+        renderItem={({ item }) => (
           <ItemCard
             item={item}
-            isChecked={!!checkedItems[item.date + index]}
-            onCheck={(value) =>
-              setCheckedItems((prev) => ({
-                ...prev,
-                [item.date + index]: value,
-              }))
-            }
           />
         )}
         renderSectionHeader={({ section: { title } }) => (
@@ -225,8 +208,18 @@ const styles = StyleSheet.create({
     opacity: 0.7,
     marginTop: 4,
   },
-  checkbox: {
-    alignItems: "flex-end",
-    marginLeft: 12,
-  },
+  completedPill: {
+      position: "absolute",
+      top: 16,
+      right: 16,
+      backgroundColor: "rgba(255,255,255,0.85)",
+      paddingHorizontal: 14,
+      paddingVertical: 8,
+      borderRadius: 999,
+    },
+    completedPillText: {
+      color: "#00171F",
+      fontSize: 14,
+      fontWeight: "600",
+    },
 });

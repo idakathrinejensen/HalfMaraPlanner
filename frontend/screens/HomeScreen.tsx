@@ -10,7 +10,6 @@ import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation<any>();
 
   // pre-run tips states
   const [tipsVisible, setTipsVisible] = useState(false);

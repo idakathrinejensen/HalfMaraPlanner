@@ -1,6 +1,6 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import Settings from "../screens/Settings";
+import Settings from "../screens/Profile";
 
 const mockReset = jest.fn();
 const mockLogout = jest.fn();
@@ -12,12 +12,12 @@ jest.mock("react-native-safe-area-context", () => {
   return { SafeAreaView: ({ children }: any) => React.createElement(View, null, children) };
 });
 
-// Navigation mock (Settings uses reset)
+// Navigation mock (Profile uses reset)
 jest.mock("@react-navigation/native", () => ({
   useNavigation: () => ({ reset: mockReset }),
 }));
 
-// Appbar mock (so "Settings" title is actually rendered)
+// Appbar mock (so "Profile" title is actually rendered)
 jest.mock("react-native-paper", () => {
   const React = require("react");
   const { View, Text } = require("react-native");

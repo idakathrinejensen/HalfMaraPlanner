@@ -123,7 +123,7 @@ function registerUser(req, res) {
   }
 
   const { password: _pw, ...safeUser } = newUser;
-  return res.json({ success: true, user: safeUser });
+  return res.json({ success: true, user: safeUser, trainingPlan: newUser.trainingPlan});
 }
 
 function getTrainingPlan(req, res) {

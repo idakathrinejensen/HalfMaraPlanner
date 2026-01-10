@@ -1,5 +1,5 @@
 import { createContext, useContext, useState } from "react";
-import { ImageSourcePropType } from "react-native";
+
 
 type User = {
   id: number;
@@ -15,17 +15,31 @@ type AuthContextType = {
   trainingPlan: TrainingPlan | null;
   login: (user: User, plan: TrainingPlan) => void;
   logout: () => void;
-  setTrainingPlan: (plan: TrainingPlan | null) => void;
+  setTrainingPlan: (plan: TrainingPlan | null | ((prev: TrainingPlan | null) => TrainingPlan | null)) => void;
 };
 
+//types to describe the format of the trainingplan 
 type TrainingPlan = {
-    image: ImageSourcePropType;
-    date: string;
-    description: string;
-    time?: string;
-    complete: Boolean;
-
+  level: string;
+  weeks: number;
+  raceDate: string;
+  sections: TrainingWeek[];
 };
+
+type TrainingWeek = {
+  title: string;
+  data: Workout[];
+};
+
+type Workout = {
+  date: string;
+  isoDate: string;
+  description: string;
+  image: string;
+  time?: string;
+  complete: boolean;
+};
+
 
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);

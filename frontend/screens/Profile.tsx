@@ -5,9 +5,35 @@ import { useNavigation } from "@react-navigation/native";
 import { Appbar } from "react-native-paper";
 import { useAuth } from "../context/AuthContext";
 
-const Settings = () => {
+const Profile = () => {
   const navigation = useNavigation<any>();
-  const { user, logout } = useAuth();
+  const { user, logout, trainingPlan } = useAuth();
+
+  const calculateStartDate = (raceDatestr: string, numWeeks: number) => {
+  const raceDate = new Date(raceDatestr);
+  
+  // Calculate total days to subtract (weeks * 7 days)
+  const daysToSubtract = numWeeks * 7;
+  
+  // Create a new date object for the start date
+  const startDate = new Date(raceDate);
+  startDate.setDate(raceDate.getDate() - daysToSubtract);
+  
+  return startDate;
+};
+
+const formatDate = (input: Date | string) => {
+  const date = typeof input === "string" ? new Date(input) : input;
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  });
+};
+
+const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
+  ? calculateStartDate(trainingPlan.raceDate, trainingPlan.weeks)
+  : null;
 
   return (
     <View style={styles.root}>
@@ -52,7 +78,7 @@ const Settings = () => {
             {/* rows */}
             <View style={styles.cardRow}>
               <Text style={styles.cardLabel}>Experience Level</Text>
-              <Text style={styles.cardValue}>Beginner</Text>
+              <Text style={styles.cardValue}>{trainingPlan?.level}</Text>
             </View>
 
             <View style={styles.cardRow}>
@@ -73,7 +99,7 @@ const Settings = () => {
 
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Start Date</Text>
-                <Text style={styles.cardValue}>January 11, 2026</Text>
+                <Text style={styles.cardValue}>{startDate ? formatDate(startDate) : ""}</Text>
               </View>
             </View>
 
@@ -82,7 +108,7 @@ const Settings = () => {
               <Image source={require("../assets/icons/trophy_purple.png")} style={styles.purpleIcon} resizeMode="contain" />
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Target Race Date</Text>
-                <Text style={styles.cardValue}>April 5, 2026</Text>
+                <Text style={styles.cardValue}>{trainingPlan?.raceDate ? formatDate(trainingPlan?.raceDate) : ""}</Text>
               </View>
             </View>
           </View>
@@ -120,7 +146,7 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default Profile;
 
 const styles = StyleSheet.create({
   root: {

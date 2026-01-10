@@ -25,7 +25,7 @@ export default function Register() {
     setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data
   }
 
-  // SAfee area view for notches etc 
+
   return (
     <SafeAreaView style={{
       flex: 1,

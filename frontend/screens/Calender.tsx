@@ -1,68 +1,39 @@
-import {
-  Text,
-  View,
-  Image,
-  SectionList,
-  StyleSheet,
-} from "react-native";
-import { useEffect, useState } from "react";
+import { Text, View, Image, SectionList, StyleSheet } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ImageSourcePropType } from "react-native";
 import { Appbar } from "react-native-paper";
-import { useAuth} from "../context/AuthContext"
+import { useAuth } from "../context/AuthContext";
 
 const Calender = () => {
+  const { trainingPlan } = useAuth();
 
-  const [sections, setSections] = useState<any[]>([]);
-  const { user } = useAuth();
+  const getIcon = (iconName: string): ImageSourcePropType => {
+    switch (iconName) {
+      case "green.png":
+        return require("../assets/icons/green.png");
+      case "grey.png":
+        return require("../assets/icons/grey.png");
+      case "orange.png":
+        return require("../assets/icons/orange.png");
+      case "purple.png":
+        return require("../assets/icons/purple.png");
+      default:
+        return require("../assets/icons/grey.png");
+    }
+  };
 
-  useEffect(() => {
-    if (!user) return;
-    const fetchTrainingPlan = async () => {
-      try {
-        const res = await fetch(
-          `http://localhost:3000/user/${user.id}/training-plan`
-        );
-
-        if (!res.ok) {
-          throw new Error("Failed to fetch training plan");
-        }
-
-        const json = await res.json();
-        const planSections = json.trainingPlan.sections;
-
-     const getIcon = (iconName: string) => {
-          switch (iconName) {
-            case "green.png":
-              return require("../assets/icons/green.png");
-            case "grey.png":
-              return require("../assets/icons/grey.png");
-            case "orange.png":
-              return require("../assets/icons/orange.png");
-            case "purple.png":
-              return require("../assets/icons/purple.png");
-          }
-        };
-
-        const formattedSections = planSections.map((section: any) => ({
-          title: section.title,
-          data: section.data.map((item: any) => ({
-            date: item.date,
-            description: item.description,
-            time: item.time,
-            image: getIcon(item.image),
-            complete: item.complete,
-          })),
-        }));
-
-        setSections(formattedSections);
-      } catch (err) {
-        console.error("Error loading training plan:", err);
-      } 
-    };
-
-    fetchTrainingPlan();
-  }, [user]);
+  const sections =
+    trainingPlan?.sections.map((week) => ({
+      title: week.title,
+      data: week.data.map((item) => ({
+        date: item.date,
+        isoDate: item.isoDate,
+        description: item.description,
+        time: item.time,
+        complete: item.complete,
+        image: getIcon(item.image),
+      })),
+    })) ?? [];
 
   type Item = {
     image: ImageSourcePropType;
@@ -84,43 +55,42 @@ const Calender = () => {
         <Text style={styles.text}>{item.description}</Text>
         <Text style={styles.time}>{item.time}</Text>
       </View>
-    {item.complete ? (
-    <View style={styles.completedPill}>
-      <Text style={styles.completedPillText}>✓ Completed</Text>
-    </View>
-  ) : null}
+      {item.complete ? (
+        <View style={styles.completedPill}>
+          <Text style={styles.completedPillText}>✓ Completed</Text>
+        </View>
+      ) : null}
     </View>
   );
-  
+
   return (
     <View style={styles.root}>
-    <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
-      <Appbar.Header style={styles.appBar}>
-        <Appbar.Content
-          title="Training Calendar"
-          titleStyle={{
-            fontSize: 30,
-            fontWeight: "bold",
-            lineHeight: 40,
-            color: "#FFF",
-          }}
-        />
-      </Appbar.Header>
-      <SectionList
-        sections={sections}
-        keyExtractor={(item, index) => item.date + index}
-        renderItem={({ item }) => (
-          <ItemCard
-            item={item}
+      <SafeAreaView
+        style={styles.background}
+        edges={["left", "right", "bottom"]}
+      >
+        <Appbar.Header style={styles.appBar}>
+          <Appbar.Content
+            title="Training Calendar"
+            titleStyle={{
+              fontSize: 30,
+              fontWeight: "bold",
+              lineHeight: 40,
+              color: "#FFF",
+            }}
           />
-        )}
-        renderSectionHeader={({ section: { title } }) => (
-          <View style={styles.header}>
-            <Text style={styles.headerText}>{title}</Text>
-          </View>
-        )}
-      />
-    </SafeAreaView>
+        </Appbar.Header>
+        <SectionList
+          sections={sections}
+          keyExtractor={(item, index) => item.date + index}
+          renderItem={({ item }) => <ItemCard item={item} />}
+          renderSectionHeader={({ section: { title } }) => (
+            <View style={styles.header}>
+              <Text style={styles.headerText}>{title}</Text>
+            </View>
+          )}
+        />
+      </SafeAreaView>
     </View>
   );
 };
@@ -209,17 +179,17 @@ const styles = StyleSheet.create({
     marginTop: 4,
   },
   completedPill: {
-      position: "absolute",
-      top: 16,
-      right: 16,
-      backgroundColor: "rgba(255,255,255,0.85)",
-      paddingHorizontal: 14,
-      paddingVertical: 8,
-      borderRadius: 999,
-    },
-    completedPillText: {
-      color: "#00171F",
-      fontSize: 14,
-      fontWeight: "600",
-    },
+    position: "absolute",
+    top: 16,
+    right: 16,
+    backgroundColor: "rgba(255,255,255,0.85)",
+    paddingHorizontal: 14,
+    paddingVertical: 8,
+    borderRadius: 999,
+  },
+  completedPillText: {
+    color: "#00171F",
+    fontSize: 14,
+    fontWeight: "600",
+  },
 });

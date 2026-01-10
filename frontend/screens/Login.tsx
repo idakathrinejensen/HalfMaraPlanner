@@ -38,7 +38,7 @@ export default function Login() {
       return;
     }
     //save user to context
-    login(data.user);
+    login(data.user, data.trainingPlan);
     
     // Navigate to Home screen on successful login
     navigation.reset({

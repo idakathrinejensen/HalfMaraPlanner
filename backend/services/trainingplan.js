@@ -97,6 +97,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
     if (d === 0 || d === 3 || d === 5) { 
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0], //used to compare in homescreen to find todays workout
         description: "Rest",
         image: ICONS.rest,
         complete: false, 
@@ -105,6 +106,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
       const mins = easyDistance * PACE[level];
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0],
         description: `Easy - ${easyDistance} km`,
         image: ICONS.easy,
         time: fmtTimeFromMinutes(mins),
@@ -114,6 +116,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
       const mins = tempoDistance * PACE[level] * 0.95; // tempo slightly faster
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0],
         description: `Tempo - ${tempoDistance} km`,
         image: ICONS.tempo,
         time: fmtTimeFromMinutes(mins),
@@ -123,6 +126,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
       const mins = longDistance * PACE[level];
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0], 
         description: `Long - ${longDistance} km`,
         image: ICONS.long,
         time: fmtTimeFromMinutes(mins),

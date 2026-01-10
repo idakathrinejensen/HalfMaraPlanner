@@ -17,9 +17,6 @@ const HomeScreen = () => {
   const [loadingTips, setLoadingTips] = useState(false);
   const [tipsError, setTipsError] = useState<string | null>(null);
 
-  // completed state
-  const [workoutCompleted, setWorkoutCompleted] = useState(false);
-
   //context
    const { user, trainingPlan, setTrainingPlan } = useAuth();
 
@@ -30,21 +27,31 @@ const HomeScreen = () => {
   const nextCount = 3;
 
   //loops trough training plan to find the workout of today
-  if (trainingPlan) {
-    for (let w = 0; w < trainingPlan.sections.length; w++) {
-      const week = trainingPlan.sections[w];
-      for (let d = 0; d < week.data.length; d++) {
-        const day = week.data[d];
+ if (trainingPlan) {
+  // Flatten the plan into a single array with week/day info
+  const allWorkouts: { workout: any; weekIndex: number; dayIndex: number }[] = [];
+  trainingPlan.sections.forEach((week, w) => {
+    week.data.forEach((day, d) => {
+      allWorkouts.push({ workout: day, weekIndex: w, dayIndex: d });
+    });
+  });
 
-        if (day.isoDate === today) {
-          todayWorkout = { workout: day, weekIndex: w, dayIndex: d };
-        }
-        if (new Date(day.isoDate) > new Date(today) && upcomingWorkouts.length < nextCount) {
-          upcomingWorkouts.push({ workout: day, weekIndex: w, dayIndex: d });
-      }
-      }
-    }
-  }
+  // Find today's workout by date
+  todayWorkout =
+    allWorkouts.find(w => w.workout.isoDate === today) ||
+    allWorkouts[0]; // default to first if none matches
+  
+  // Find the index of todayWorkout in the flattened array
+  const todayIndex = allWorkouts.findIndex(
+    w => w.workout === todayWorkout!.workout
+  );
+
+  // Take the next `nextCount` workouts after today
+  upcomingWorkouts.push(
+    ...allWorkouts.slice(todayIndex + 1, todayIndex + 1 + nextCount)
+  );
+
+}
 
    
   async function onPressPreRunTips() {
@@ -116,6 +123,8 @@ const MarkAsComplete = async () => {
     alert("Failed to mark workout complete");
   }
 };
+//variable to make dependencies on completeness of a workout.
+const isCurrentWorkoutComplete = todayWorkout?.workout?.complete ?? false;
 
 
     return(
@@ -133,7 +142,7 @@ const MarkAsComplete = async () => {
                 {/* header */}
                 <View style={styles.headerRow}>
                   <View>
-                    <Text style={styles.greeting}>Good morning,</Text>
+                    <Text style={styles.greeting}>Good afternoon,</Text>
                     <Text style={styles.name}>{user?.fullName ?? "Runner"}</Text>
                 </View>
                 </View>
@@ -163,21 +172,25 @@ const MarkAsComplete = async () => {
             </View>
 
             <View style={styles.todayCard}>
-              {workoutCompleted ? (
-                <View style={styles.completedPill}>
-                <Text style={styles.completedPillText}>✓ Completed</Text>
-                </View>
-              ) : null}
+             {isCurrentWorkoutComplete && (
+    <View style={styles.completedPill}>
+      <Text style={styles.completedPillText}>✓ Completed</Text>
+    </View>
+  )}
               <View style={{marginBottom:24}}>
-                {todayWorkout && ( <>
-                <Text style={styles.todayType}>{todayWorkout.workout.description.split(" - ")[0]}</Text>
-                <Text style={styles.todayDistance}>{todayWorkout.workout.description.split(" - ")[1]}</Text>
-                <Text style={styles.todayTime}>{todayWorkout.workout.time ?? ""}</Text> {/* if time is null, an empty string will be displayed */}
-                </>
-                )}
-              </View>
+                {todayWorkout ? (
+      <View>
+        <Text style={styles.todayType}>
+          {todayWorkout.workout.description ?? ""}
+        </Text>
+        <Text style={styles.todayTime}>
+          {todayWorkout.workout.time ?? ""}
+        </Text>
+      </View>
+    ) : null}
+  </View>
 
-              {!workoutCompleted ? (
+              {!isCurrentWorkoutComplete ? (
                 <>
                 <TouchableOpacity 
               style={styles.primaryButton}
@@ -185,24 +198,24 @@ const MarkAsComplete = async () => {
                 if (tipsVisible) setTipsVisible(false);
                 else onPressPreRunTips();
               }}
-              disabled={loadingTips || workoutCompleted}
+              disabled={loadingTips || isCurrentWorkoutComplete}
               >
                 {loadingTips ? (
                   <ActivityIndicator/>
                 ) : (
                 <Text style={styles.primaryButtonText}>
-                  {workoutCompleted ? "Workout Completed" : tipsVisible ? "Hide Tips" : "Get Pre-Run Tips"}
+                  {isCurrentWorkoutComplete ? "Workout Completed" : tipsVisible ? "Hide Tips" : "Get Pre-Run Tips"}
                   </Text>
                 )}
               </TouchableOpacity>
 
               <TouchableOpacity 
-                style={[styles.secondaryButton, workoutCompleted && styles.secondaryButtonCompleted]}
+                style={[styles.secondaryButton, isCurrentWorkoutComplete && styles.secondaryButtonCompleted]}
                 onPress={MarkAsComplete}
-                disabled={workoutCompleted}
+                disabled={isCurrentWorkoutComplete}
                 >
                 <Text style={styles.secondaryButtonText}>
-                  {workoutCompleted ? "Completed" : "Mark as Complete"}
+                  {isCurrentWorkoutComplete ? "Completed" : "Mark as Complete"}
                   </Text>
               </TouchableOpacity>
                 </>
@@ -210,7 +223,7 @@ const MarkAsComplete = async () => {
             </View>
 
             {/* Completed run text*/}
-              {workoutCompleted ? (
+              {isCurrentWorkoutComplete ? (
                 <View style={styles.completedCard}>
                   <Text style={styles.completedTitle}>Great job completing your run!</Text>
 
@@ -279,25 +292,21 @@ const MarkAsComplete = async () => {
 
 
             {/* upcoming runs */}
-            <View style={styles.sectionHeaderRow}>
-              <Text style={styles.sectionTitle}>Upcoming Runs</Text>
-            </View>
+<View style={styles.sectionHeaderRow}>
+  <Text style={styles.sectionTitle}>Upcoming Runs</Text>
+</View>
 
-            <View style={styles.runsList}>
-              {[
-                { day: upcomingWorkouts[0].workout.date, title: upcomingWorkouts[0].workout.description, time: upcomingWorkouts[0].workout.time},
-                { day: upcomingWorkouts[1].workout.date, title: upcomingWorkouts[1].workout.description, time: upcomingWorkouts[1].workout.time},
-                { day: upcomingWorkouts[2].workout.date, title: upcomingWorkouts[2].workout.description, time: upcomingWorkouts[2].workout.time},
-              ]. map((run)=> (
-                <TouchableOpacity key={run.day} style={styles.runCard}>
-                <View>
-                  <Text style={styles.runDay}>{run.day}</Text>
-                  <Text style={styles.runTitle}>{run.title}</Text>
-                </View>
-                <Text style={styles.runTime}>{run.time}</Text>
-              </TouchableOpacity>
-              ))}
-            </View>
+<View style={styles.runsList}>
+  {upcomingWorkouts.map((item, index) => (
+    <TouchableOpacity key={item.workout.isoDate || index} style={styles.runCard}>
+      <View>
+        <Text style={styles.runDay}>{item.workout.date}</Text>
+        <Text style={styles.runTitle}>{item.workout.description}</Text>
+      </View>
+      <Text style={styles.runTime}>{item.workout.time ?? ""}</Text>
+    </TouchableOpacity>
+  ))}
+</View>
           </ScrollView>
         </SafeAreaView>
       </View>

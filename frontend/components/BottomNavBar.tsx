@@ -4,7 +4,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 const TABS = [
   { key: "home", label: "Home", icon: require("../assets/icons/home.png") },
   { key: "calendar", label: "Calendar", icon: require("../assets/icons/calendar.png") },
-  { key: "settings", label: "Settings", icon: require("../assets/icons/setting.png") },
+  { key: "profile", label: "profile", icon: require("../assets/icons/profile.png") },
 ];
 
 const BottomNavBar = (

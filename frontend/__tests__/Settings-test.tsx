@@ -1,23 +1,23 @@
 import React from "react";
 import { render, fireEvent } from "@testing-library/react-native";
-import Settings from "../app/Settings";
+import Settings from "../screens/Settings";
 
-// mocks
+const mockReset = jest.fn();
+const mockLogout = jest.fn();
+
+// SafeAreaView mock
 jest.mock("react-native-safe-area-context", () => {
   const React = require("react");
   const { View } = require("react-native");
-  return {
-    SafeAreaView: ({ children }: any) => React.createElement(View, null, children),
-  };
+  return { SafeAreaView: ({ children }: any) => React.createElement(View, null, children) };
 });
 
-// Navigation mock
-const mockNavigate = jest.fn();
+// Navigation mock (Settings uses reset)
 jest.mock("@react-navigation/native", () => ({
-  useNavigation: () => ({ navigate: mockNavigate }),
+  useNavigation: () => ({ reset: mockReset }),
 }));
 
-// Mock Appbar from react-native-paper
+// Appbar mock (so "Settings" title is actually rendered)
 jest.mock("react-native-paper", () => {
   const React = require("react");
   const { View, Text } = require("react-native");
@@ -29,19 +29,43 @@ jest.mock("react-native-paper", () => {
   };
 });
 
+// Mock png requires used by <Image source={require(...)} />
+jest.mock("../assets/icons/profile.png", () => 1);
+jest.mock("../assets/icons/calendar_purple.png", () => 1);
+jest.mock("../assets/icons/trophy_purple.png", () => 1);
+
+// AuthContext mock (override per test)
+const mockUseAuth = jest.fn();
+jest.mock("../context/AuthContext", () => ({
+  useAuth: () => mockUseAuth(),
+}));
+
 beforeEach(() => {
-  mockNavigate.mockClear();
+  mockReset.mockClear();
+  mockLogout.mockClear();
+  mockUseAuth.mockReset();
 });
 
-// Tests for Settings screen
-test("renders the Settings title", () => {
+test("valid user shows name/email and logout resets", () => {
+  mockUseAuth.mockReturnValueOnce({
+    user: { fullName: "Sofus", email: "a@b.com" },
+    logout: mockLogout,
+  });
+
   const { getByText } = render(<Settings />);
+
   expect(getByText("Settings")).toBeTruthy();
+  expect(getByText("Sofus")).toBeTruthy();
+  expect(getByText("a@b.com")).toBeTruthy();
+
+  fireEvent.press(getByText("Log Out"));
+  expect(mockLogout).toHaveBeenCalled();
+  expect(mockReset).toHaveBeenCalledWith({ index: 0, routes: [{ name: "Login" }] });
 });
 
-// Test logout navigation
-test("logs out to Login", () => {
+test("invalid user shows fallback Runner", () => {
+  mockUseAuth.mockReturnValueOnce({ user: null, logout: mockLogout });
+
   const { getByText } = render(<Settings />);
-  fireEvent.press(getByText("Log Out"));
-  expect(mockNavigate).toHaveBeenCalledWith("Login");
+  expect(getByText("Runner")).toBeTruthy();
 });

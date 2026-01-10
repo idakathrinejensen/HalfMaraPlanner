@@ -1,8 +1,8 @@
 import React from "react";
-import { render, fireEvent, waitFor } from "@testing-library/react-native";
-import Calender from "../app/Calender";
+import { render } from "@testing-library/react-native";
+import Calender from "../screens/Calender";
 
-// Mocks
+// --- Minimal mocks so Jest doesn't crash ---
 
 jest.mock("react-native-safe-area-context", () => {
   const React = require("react");
@@ -12,12 +12,6 @@ jest.mock("react-native-safe-area-context", () => {
   };
 });
 
-// Navigation mock
-jest.mock("@react-navigation/native", () => ({
-  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
-}));
-
-// Mock Appbar from react-native-paper
 jest.mock("react-native-paper", () => {
   const React = require("react");
   const { View, Text } = require("react-native");
@@ -29,82 +23,54 @@ jest.mock("react-native-paper", () => {
   };
 });
 
-// Mock CheckBox from react-native-elements
-jest.mock("react-native-elements", () => {
-  const React = require("react");
-  const { Pressable, Text } = require("react-native");
-  return {
-    CheckBox: ({ checked, onPress }: any) =>
-      React.createElement(
-        Pressable,
-        { testID: "checkbox", accessibilityRole: "button", onPress },
-        React.createElement(Text, null, checked ? "checked" : "unchecked")
-      ),
-  };
-});
+// Mock the icon imports used by getIcon()
+jest.mock("../assets/icons/green.png", () => 1);
+jest.mock("../assets/icons/grey.png", () => 1);
+jest.mock("../assets/icons/orange.png", () => 1);
+jest.mock("../assets/icons/purple.png", () => 1);
+
+// Mock AuthContext (override per test)
+const mockUseAuth = jest.fn();
+jest.mock("../context/AuthContext", () => ({
+  useAuth: () => mockUseAuth(),
+}));
 
 beforeEach(() => {
-  (global as any).fetch = jest.fn();
-  jest.spyOn(console, "error").mockImplementation(() => {});
+  mockUseAuth.mockReset();
 });
 
-afterEach(() => {
-  (console.error as unknown as jest.Mock).mockRestore?.();
-});
+test("valid: shows week + workout and ✓ Completed", () => {
+  mockUseAuth.mockReturnValueOnce({
+    trainingPlan: {
+      sections: [
+        {
+          title: "Week 1",
+          data: [
+            {
+              date: "Today",
+              isoDate: "2026-01-10",
+              description: "Easy Run - 5 km",
+              time: "30 min",
+              complete: true,
+              image: "green.png",
+            },
+          ],
+        },
+      ],
+    },
+  });
 
-test("renders the header", () => {
   const { getByText } = render(<Calender />);
   expect(getByText("Training Calendar")).toBeTruthy();
+  expect(getByText("Week 1")).toBeTruthy();
+  expect(getByText("Easy Run - 5 km")).toBeTruthy();
+  expect(getByText("✓ Completed")).toBeTruthy();
 });
 
-// Tests for fetching and displaying plan items
-test("loads and shows plan items", async () => {
-  (global.fetch as jest.Mock).mockResolvedValueOnce({
-    ok: true,
-    json: async () => [
-      {
-        title: "Week 1",
-        data: [
-          {
-            date: "2026-02-01",
-            description: "Easy run",
-            time: "30 min",
-            image: "green.png",
-          },
-        ],
-      },
-    ],
-  });
+test("invalid: no training plan shows only header", () => {
+  mockUseAuth.mockReturnValueOnce({ trainingPlan: null });
 
-  const { getByText } = render(<Calender />);
-
-  await waitFor(() => expect(getByText("Week 1")).toBeTruthy());
-  expect(getByText("Easy run")).toBeTruthy();
-  expect(global.fetch).toHaveBeenCalledTimes(1);
-});
-
-test("toggles checkbox", async () => {
-  (global.fetch as jest.Mock).mockResolvedValueOnce({
-    ok: true,
-    json: async () => [
-      {
-        title: "Week 1",
-        data: [
-          {
-            date: "2026-02-01",
-            description: "Easy run",
-            time: "30 min",
-            image: "green.png",
-          },
-        ],
-      },
-    ],
-  });
-
-  const { getByText, getByTestId } = render(<Calender />);
-  await waitFor(() => expect(getByText("Week 1")).toBeTruthy());
-
-  expect(getByText("unchecked")).toBeTruthy();
-  fireEvent.press(getByTestId("checkbox"));
-  expect(getByText("checked")).toBeTruthy();
+  const { getByText, queryByText } = render(<Calender />);
+  expect(getByText("Training Calendar")).toBeTruthy();
+  expect(queryByText("Week 1")).toBeNull();
 });

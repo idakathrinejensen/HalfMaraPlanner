@@ -5,6 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
   const [step, setStep] = useState<number>(1);
@@ -17,6 +18,8 @@ export default function Register() {
     raceDate: '',
   });
   const navigation = useNavigation<any>();
+
+  const { login } = useAuth();
 
   function updateUserData(newFields: Partial<typeof userData>) {
     setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data
@@ -418,7 +421,8 @@ export default function Register() {
               };
 
               try {
-                const res = await fetch("http://localhost:3000/user/register", {
+                // register
+                const res = await fetch("http://172.20.10.2:3000/user/register", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(payload),
@@ -431,6 +435,26 @@ export default function Register() {
                   return;
                 }
 
+                // login right after register
+                const loginRes = await fetch("http://172.20.10.2:3000/user/login", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    email: payload.email,
+                    password: payload.password,
+                  }),
+                });
+
+                const loginData = await loginRes.json();
+
+                if (!loginData.success) {
+                  alert ("Account created");
+                  navigation.navigate("Login" as never);
+                  return;
+                }
+                // save user to UI layout
+                login(loginData.user);
+                
                 navigation.reset({
                   index: 0,
                   routes: [{ name: "MainTabs" as never }],

@@ -7,7 +7,7 @@ import { AuthProvider} from './context/AuthContext'
 import Calender from './screens/Calender';
 import Register from './screens/Register';
 import Home from './screens/HomeScreen';
-import Settings from './screens/Settings';
+import Profile from './screens/Profile';
 import Login from './screens/Login';
 import BottomNavBar from './components/BottomNavBar';
 
@@ -28,14 +28,14 @@ function MainTabs() {
             activeTab={
               routeKey === "Calender"
                 ? "calendar"
-                : routeKey === "Settings"
-                ? "settings"
+                : routeKey === "Profile"
+                ? "profile"
                 : "home"
             }
             onTabPress={(tabKey) =>{
               if (tabKey === "home") navigation.navigate("Home");
               if (tabKey === "calendar") navigation.navigate("Calender");
-              if (tabKey === "settings") navigation.navigate("Settings");
+              if (tabKey === "profile") navigation.navigate("Profile");
             }}
           />
         );
@@ -43,7 +43,7 @@ function MainTabs() {
     >
       <Tab.Screen name="Home" component={Home} />
        <Tab.Screen name="Calender" component={Calender} />
-        <Tab.Screen name="Settings" component={Settings} />
+        <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }

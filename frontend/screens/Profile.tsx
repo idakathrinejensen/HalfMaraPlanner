@@ -54,7 +54,7 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
           contentContainerStyle={styles.contentContainer}
           showsVerticalScrollIndicator={false}
         >
-          {/* PROFILE */}
+          {/* profile */}
           <View style={styles.sectionHeaderRow}>
             <Text style={styles.sectionTitle}>ABOUT YOU</Text>
           </View>
@@ -71,7 +71,6 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
               </View>
             </View>
 
-            {/* divider */}
             <View style={styles.divider} />
 
             {/* rows */}
@@ -86,7 +85,7 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
             </View>
           </View>
 
-          {/* TRAINING PLAN */}
+          {/* training plan */}
           <View style={styles.sectionHeaderRow}>
             <Text style={styles.sectionTitle}>TRAINING PLAN</Text>
           </View>
@@ -112,7 +111,7 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
             </View>
           </View>
 
-          {/* ABOUT */}
+          {/* about */}
           <View style={styles.sectionHeaderRow}>
             <Text style={styles.sectionTitle}>ABOUT US</Text>
           </View>
@@ -125,7 +124,7 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
             </Text>
           </View>
 
-          {/* LOG OUT */}
+          {/* log out */}
           <TouchableOpacity
             activeOpacity={0.85}
             style={styles.logoutButton}

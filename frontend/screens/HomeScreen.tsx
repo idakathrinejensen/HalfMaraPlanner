@@ -351,19 +351,19 @@ const styles = StyleSheet.create({
       width: 38,
       height: 38,
       borderRadius: 16,
-      backgroundColor: "rgba(255,255,255,0.1)", // 10% opacity
+      backgroundColor: "rgba(255,255,255,0.1)",
       borderWidth: 1,
-      borderColor: "rgba(255,255,255,0.2)", // 20% opacity
-      justifyContent: "center", // center icon
-      alignItems: "center", // center icon
+      borderColor: "rgba(255,255,255,0.2)", 
+      justifyContent: "center",
+      alignItems: "center", 
     },
 
     // training progress
     progressCard: {
-      backgroundColor: "rgba(255,255,255,0.05)", // 5% opacity
+      backgroundColor: "rgba(255,255,255,0.05)", 
       borderRadius: 16,
       borderWidth: 1,
-      borderColor: "rgba(255,255,255,0.1)",  // 10% opacity
+      borderColor: "rgba(255,255,255,0.1)", 
       padding: 20,
       marginBottom: 24,
     },
@@ -393,7 +393,7 @@ const styles = StyleSheet.create({
     progressBarBackground: {
       height: 8,
       borderRadius: 999,
-      backgroundColor: "rgba(255,255,255,0.1)", // 10% opacity
+      backgroundColor: "rgba(255,255,255,0.1)", 
     },
     progressBarFill: {
       height: "100%",
@@ -421,7 +421,7 @@ const styles = StyleSheet.create({
       borderRadius: 16,
       borderWidth: 2,
       borderColor: "#8B80F9",
-      backgroundColor: "rgba(139,128,249,0.1)", // 10% opacity
+      backgroundColor: "rgba(139,128,249,0.1)", 
       padding: 24,
       marginBottom: 24,
       position: "relative",
@@ -457,9 +457,9 @@ const styles = StyleSheet.create({
       marginTop: 12,
       height: 50,
       borderRadius: 16,
-      backgroundColor: "rgba(255,255,255,0.1)", // 10% opacity
+      backgroundColor: "rgba(255,255,255,0.1)", 
       borderWidth: 1, 
-      borderColor: "rgba(255,255,255,0.2)",// 20% opacity
+      borderColor: "rgba(255,255,255,0.2)",
       justifyContent: "center",
       alignItems: "center",
     },
@@ -581,10 +581,10 @@ const styles = StyleSheet.create({
       marginBottom: 32,
     },
     runCard: {
-      backgroundColor: "rgba(255,255,255,0.05)", // 5% opacity
+      backgroundColor: "rgba(255,255,255,0.05)", 
       borderRadius: 16,
       borderWidth: 1,
-      borderColor: "rgba(255,255,255,0.1)", // 10% opacity
+      borderColor: "rgba(255,255,255,0.1)", 
       paddingHorizontal: 16,
       paddingVertical: 16,
       flexDirection: "row",

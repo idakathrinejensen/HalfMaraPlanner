@@ -98,7 +98,7 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
       days.push({
         date: fd,
         isoDate: date.toISOString().split("T")[0], //used to compare in homescreen to find todays workout
-        description: "Rest",
+        description: "Recovery day",
         image: ICONS.rest,
         complete: false, 
       });

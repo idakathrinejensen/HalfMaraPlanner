@@ -38,12 +38,7 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
   return (
     <View style={styles.root}>
       <SafeAreaView style={styles.background} edges={["left", "right"]}>
-        <ScrollView
-          style={styles.background}
-          contentContainerStyle={styles.contentContainer}
-          showsVerticalScrollIndicator={false}
-        >
-          <Appbar.Header style={styles.appBar}>
+        <Appbar.Header style={styles.appBar}>
             <Appbar.Content
               title="Profile"
               titleStyle={{
@@ -54,7 +49,11 @@ const startDate = trainingPlan?.raceDate && trainingPlan?.weeks
               }}
             />
           </Appbar.Header>
-
+        <ScrollView
+          style={styles.background}
+          contentContainerStyle={styles.contentContainer}
+          showsVerticalScrollIndicator={false}
+        >
           {/* PROFILE */}
           <View style={styles.sectionHeaderRow}>
             <Text style={styles.sectionTitle}>ABOUT YOU</Text>

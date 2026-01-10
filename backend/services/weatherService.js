@@ -1,4 +1,4 @@
-const axios = require("axios"); // so HTTP works
+const axios = require("axios"); 
 
 const API_KEY = process.env.OPENWEATHER_API_KEY;
 if (!API_KEY) {
@@ -23,7 +23,7 @@ async function geocodeCity(city) {
   return { lat, lon, name, country };
 }
 
-// helper to get tne Call 3.0 endpoint
+// helper to get the Call 3.0 endpoint
 async function getOneCall(lat, lon) {
   const url = "https://api.openweathermap.org/data/3.0/onecall";
   const resp = await axios.get(url, {

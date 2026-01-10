@@ -5,6 +5,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useAuth } from "../context/AuthContext";
 
 export default function Register() {
   const [step, setStep] = useState<number>(1);
@@ -16,13 +17,15 @@ export default function Register() {
     duration: '',
     raceDate: '',
   });
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
+
+  const { login, trainingPlan } = useAuth();
 
   function updateUserData(newFields: Partial<typeof userData>) {
     setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data
   }
 
-  // SAfee area view for notches etc 
+
   return (
     <SafeAreaView style={{
       flex: 1,
@@ -157,7 +160,18 @@ export default function Register() {
         >
           <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>Continue</Text>
         </Pressable>
-
+          {/* Navigate to login Screen */}
+          <Text
+            onPress={() => navigation.navigate('Login' as never)}
+            style={{
+              color: '#cbd5e1',
+              marginTop: 20,
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+            }}
+          >
+            Already have an account? Go to login
+          </Text>
       </View>
     );
   }
@@ -407,6 +421,7 @@ export default function Register() {
               };
 
               try {
+                // register
                 const res = await fetch("http://localhost:3000/user/register", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
@@ -420,11 +435,33 @@ export default function Register() {
                   return;
                 }
 
-                alert("Account created!");
-                navigation.navigate("HomeScreen" as never);
+                // login right after register
+                const loginRes = await fetch("http://localhost:3000/user/login", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({
+                    email: payload.email,
+                    password: payload.password,
+                  }),
+                });
+
+                const loginData = await loginRes.json();
+
+                if (!loginData.success) {
+                  alert ("Account created");
+                  navigation.navigate("Login" as never);
+                  return;
+                }
+                // save user to UI layout
+                login(loginData.user, loginData.trainingPlan);
+                
+                navigation.reset({
+                  index: 0,
+                  routes: [{ name: "MainTabs" as never }],
+                });
               } catch (err) {
                 console.log(err);
-                alert("Failed to connect to backend.");
+                alert("There was an error");
               }
             }}
             style={{

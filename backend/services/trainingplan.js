@@ -18,8 +18,8 @@ function getStartDateFromRace(raceDateStr, weeks) {
 const ICONS = {
   rest: "green.png",
   easy: "grey.png",
-  tempo: "yellow.png",
-  long: "red.png",
+  tempo: "orange.png",
+  long: "purple.png",
 };
 
 //Estimated starting pace for the different groups
@@ -97,32 +97,40 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
     if (d === 0 || d === 3 || d === 5) { 
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0], //used to compare in homescreen to find todays workout
         description: "Rest",
         image: ICONS.rest,
+        complete: false, 
       });
     } else if (d === 1 || d === 4) {
       const mins = easyDistance * PACE[level];
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0],
         description: `Easy - ${easyDistance} km`,
         image: ICONS.easy,
         time: fmtTimeFromMinutes(mins),
+        complete: false,
       });
     } else if (d === 2) {
       const mins = tempoDistance * PACE[level] * 0.95; // tempo slightly faster
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0],
         description: `Tempo - ${tempoDistance} km`,
         image: ICONS.tempo,
         time: fmtTimeFromMinutes(mins),
+        complete: false,
       });
     }  else if (d === 6) {
       const mins = longDistance * PACE[level];
       days.push({
         date: fd,
+        isoDate: date.toISOString().split("T")[0], 
         description: `Long - ${longDistance} km`,
         image: ICONS.long,
         time: fmtTimeFromMinutes(mins),
+        complete: false,
       });
     }
   }

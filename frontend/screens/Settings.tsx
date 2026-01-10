@@ -3,13 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Image } from "rea
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useNavigation } from "@react-navigation/native";
 import { Appbar } from "react-native-paper";
+import { useAuth } from "../context/AuthContext";
 
 const Settings = () => {
   const navigation = useNavigation<any>();
+  const { user, logout } = useAuth();
 
   return (
     <View style={styles.root}>
-      <SafeAreaView style={styles.background} edges={["left", "right", "bottom"]}>
+      <SafeAreaView style={styles.background} edges={["left", "right"]}>
         <ScrollView
           style={styles.background}
           contentContainerStyle={styles.contentContainer}
@@ -39,8 +41,8 @@ const Settings = () => {
                 <Image source={require("../assets/icons/profile.png")} style={styles.avatarIcon} resizeMode="contain" />
               </View>
               <View style={styles.profileTextCol}>
-                <Text style={styles.profileName}>Leonardo da Vinci</Text>
-                <Text style={styles.profileEmail}>leo@polimi.it</Text>
+                <Text style={styles.profileName}>{user?.fullName ?? "Runner"}</Text>
+                <Text style={styles.profileEmail}>{user?.email ?? ""}</Text>
               </View>
             </View>
 
@@ -71,7 +73,7 @@ const Settings = () => {
 
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Start Date</Text>
-                <Text style={styles.cardValue}>November 26, 2025</Text>
+                <Text style={styles.cardValue}>January 11, 2026</Text>
               </View>
             </View>
 
@@ -80,7 +82,7 @@ const Settings = () => {
               <Image source={require("../assets/icons/trophy_purple.png")} style={styles.purpleIcon} resizeMode="contain" />
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Target Race Date</Text>
-                <Text style={styles.cardValue}>June 21, 2026</Text>
+                <Text style={styles.cardValue}>April 5, 2026</Text>
               </View>
             </View>
           </View>
@@ -103,7 +105,11 @@ const Settings = () => {
             activeOpacity={0.85}
             style={styles.logoutButton}
             onPress={() => {
-              navigation.navigate("Login");
+              logout();
+              navigation.reset({
+                index: 0,
+                routes: [{ name: "Login" }],
+              });
             }}
           >
             <Text style={styles.logoutText}>Log Out</Text>

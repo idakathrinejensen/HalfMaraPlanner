@@ -1,17 +1,15 @@
-import { ScrollView, StyleSheet, Text, View, Image, TouchableOpacity } from "react-native";
+import { ScrollView, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ActivityIndicator } from "react-native-paper";
 import React, { useState } from "react";
 import * as Location from "expo-location";
-import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../context/AuthContext";
 
 import { fetchWeatherByCoords, WeatherDTO } from "../scripts/weatherService";
 import { generateTips, Tips } from "../scripts/tips";
 
 
 const HomeScreen = () => {
-  const navigation = useNavigation<any>();
-
   // pre-run tips states
   const [tipsVisible, setTipsVisible] = useState(false);
   const [weather, setWeather] = useState<WeatherDTO | null>(null);
@@ -21,6 +19,33 @@ const HomeScreen = () => {
 
   // completed state
   const [workoutCompleted, setWorkoutCompleted] = useState(false);
+
+  //context
+   const { user, trainingPlan, setTrainingPlan } = useAuth();
+
+  //getting the date to render todays workout 
+  const today = new Date().toISOString().split("T")[0];
+  let todayWorkout: { workout: any; weekIndex: number; dayIndex: number } | null = null;
+  const upcomingWorkouts: { workout: any; weekIndex: number; dayIndex: number }[] = [];
+  const nextCount = 3;
+
+  //loops trough training plan to find the workout of today
+  if (trainingPlan) {
+    for (let w = 0; w < trainingPlan.sections.length; w++) {
+      const week = trainingPlan.sections[w];
+      for (let d = 0; d < week.data.length; d++) {
+        const day = week.data[d];
+
+        if (day.isoDate === today) {
+          todayWorkout = { workout: day, weekIndex: w, dayIndex: d };
+        }
+        if (new Date(day.isoDate) > new Date(today) && upcomingWorkouts.length < nextCount) {
+          upcomingWorkouts.push({ workout: day, weekIndex: w, dayIndex: d });
+      }
+      }
+    }
+  }
+
    
   async function onPressPreRunTips() {
   try {
@@ -50,10 +75,47 @@ const HomeScreen = () => {
   }
 }
 
-function onPressMarkAsComplete() {
-  setWorkoutCompleted(true);
-  setTipsVisible(false); // hide pre-run tips
-}
+const MarkAsComplete = async () => {
+  if (!user || !trainingPlan || !todayWorkout) return;
+  const { weekIndex, dayIndex } = todayWorkout;
+  try {
+    // Call backend to mark workout complete in db
+    const response = await fetch(
+      `http://localhost:3000/user/${user.id}/complete`,
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ weekIndex, dayIndex }),
+      }
+    );
+    const data = await response.json();
+    if (!response.ok || !data.success) {
+      alert(data.message || "Failed to mark workout complete");
+      return;
+    }
+
+    // Update the frontend context with the updated workout
+    setTrainingPlan(prev  => {
+      if (!prev) return prev;
+
+      const updatedSections = prev.sections.map((week, wIdx) => {
+        if (wIdx !== weekIndex) return week;
+
+        return {
+          ...week,
+          data: week.data.map((day, dIdx) =>
+            dIdx === dayIndex ? { ...day, complete: true } : day
+          ),
+        };
+      });
+
+      return { ...prev, sections: updatedSections };
+    });
+  } catch (err) {
+    console.error(err);
+    alert("Failed to mark workout complete");
+  }
+};
 
 
     return(
@@ -72,7 +134,7 @@ function onPressMarkAsComplete() {
                 <View style={styles.headerRow}>
                   <View>
                     <Text style={styles.greeting}>Good morning,</Text>
-                    <Text style={styles.name}>Leonardo da Vinci</Text>
+                    <Text style={styles.name}>{user?.fullName ?? "Runner"}</Text>
                 </View>
                 </View>
 
@@ -85,8 +147,8 @@ function onPressMarkAsComplete() {
                       </View>
 
                       <View style={{ alignItems: "flex-end" }}>
+                          <View style={{height: 26}} />
                           <Text style={styles.progressPercent}>0%</Text>
-                          <Text style={styles.progressRuns}>0/84 runs</Text>
                       </View>
                       </View>
 
@@ -107,12 +169,17 @@ function onPressMarkAsComplete() {
                 </View>
               ) : null}
               <View style={{marginBottom:24}}>
-                <Text style={styles.todayType}>REST RUN</Text>
-                <Text style={styles.todayDistance}>5 km</Text>
-                <Text style={styles.todayTime}>24 minutes</Text>
+                {todayWorkout && ( <>
+                <Text style={styles.todayType}>{todayWorkout.workout.description.split(" - ")[0]}</Text>
+                <Text style={styles.todayDistance}>{todayWorkout.workout.description.split(" - ")[1]}</Text>
+                <Text style={styles.todayTime}>{todayWorkout.workout.time ?? ""}</Text> {/* if time is null, an empty string will be displayed */}
+                </>
+                )}
               </View>
 
-              <TouchableOpacity 
+              {!workoutCompleted ? (
+                <>
+                <TouchableOpacity 
               style={styles.primaryButton}
               onPress={() => {
                 if (tipsVisible) setTipsVisible(false);
@@ -131,13 +198,15 @@ function onPressMarkAsComplete() {
 
               <TouchableOpacity 
                 style={[styles.secondaryButton, workoutCompleted && styles.secondaryButtonCompleted]}
-                onPress={onPressMarkAsComplete}
+                onPress={MarkAsComplete}
                 disabled={workoutCompleted}
                 >
                 <Text style={styles.secondaryButtonText}>
                   {workoutCompleted ? "Completed" : "Mark as Complete"}
                   </Text>
               </TouchableOpacity>
+                </>
+              ) : null}
             </View>
 
             {/* Completed run text*/}
@@ -212,16 +281,13 @@ function onPressMarkAsComplete() {
             {/* upcoming runs */}
             <View style={styles.sectionHeaderRow}>
               <Text style={styles.sectionTitle}>Upcoming Runs</Text>
-              <TouchableOpacity>
-                <Text style={styles.linkText}>View All</Text>
-              </TouchableOpacity>
             </View>
 
             <View style={styles.runsList}>
               {[
-                { day: "Tue, Nov 25", title: "EASY - 5 km", time: "30 min"},
-                { day: "Thu, Nov 27", title: "REST - 3 km", time: "17 min"},
-                { day: "Sat, Nov 29", title: "TEMPO - 6 km", time: "32 min"},
+                { day: upcomingWorkouts[0].workout.date, title: upcomingWorkouts[0].workout.description, time: upcomingWorkouts[0].workout.time},
+                { day: upcomingWorkouts[1].workout.date, title: upcomingWorkouts[1].workout.description, time: upcomingWorkouts[1].workout.time},
+                { day: upcomingWorkouts[2].workout.date, title: upcomingWorkouts[2].workout.description, time: upcomingWorkouts[2].workout.time},
               ]. map((run)=> (
                 <TouchableOpacity key={run.day} style={styles.runCard}>
                 <View>
@@ -500,13 +566,6 @@ const styles = StyleSheet.create({
       fontSize: 16,
       fontWeight: "500",
       lineHeight: 22,
-    },
-
-    // upcoming runs
-    linkText: {
-      color: "#8B80F9",
-      fontSize: 16,
-      fontWeight: "500",
     },
     runsList: {
       gap: 8,

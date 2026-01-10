@@ -49,14 +49,14 @@ beforeEach(() => {
 // Valid user
 test("valid user shows name/email and logout resets", () => {
   mockUseAuth.mockReturnValueOnce({
-    user: { fullName: "Sofus", email: "a@b.com" },
+    user: { fullName: "Leo", email: "a@b.com" },
     logout: mockLogout,
   });
 
   const { getByText } = render(<Settings />);
 
-  expect(getByText("Settings")).toBeTruthy();
-  expect(getByText("Sofus")).toBeTruthy();
+  expect(getByText("Profile")).toBeTruthy();
+  expect(getByText("Leo")).toBeTruthy();
   expect(getByText("a@b.com")).toBeTruthy();
 
   fireEvent.press(getByText("Log Out"));

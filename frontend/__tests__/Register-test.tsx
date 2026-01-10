@@ -35,7 +35,7 @@ jest.mock("@react-native-community/datetimepicker", () => {
   const React = require("react");
   return function MockDateTimePicker(props: any) {
     React.useEffect(() => {
-      props.onChange?.(null, new Date("2026-02-01T00:00:00.000Z"));
+      props.onChange?.(null, new Date("2026-08-01T00:00:00.000Z"));
     }, []);
     return React.createElement(React.Fragment, null);
   };
@@ -53,7 +53,7 @@ async function goToStep3(screen: any) {
   const { getByPlaceholderText, getByText } = screen;
 
   // Step 1
-  fireEvent.changeText(getByPlaceholderText("Enter your full name"), "Sofus");
+  fireEvent.changeText(getByPlaceholderText("Enter your full name"), "Leo");
   fireEvent.changeText(getByPlaceholderText("Enter your email"), "a@b.com");
   fireEvent.changeText(getByPlaceholderText("Create a password"), "abc123");
   fireEvent.press(getByText("Continue"));
@@ -66,7 +66,7 @@ async function goToStep3(screen: any) {
 
   // Step 3: open date picker (mock will auto-select a date)
   fireEvent.press(getByText("Select race date"));
-  await waitFor(() => expect(getByText("2026-02-01")).toBeTruthy());
+  await waitFor(() => expect(getByText("2026-08-01")).toBeTruthy());
 }
 
 // Valid register + login resets to MainTabs

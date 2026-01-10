@@ -19,7 +19,7 @@ export default function Register() {
   });
   const navigation = useNavigation<any>();
 
-  const { login } = useAuth();
+  const { login, trainingPlan } = useAuth();
 
   function updateUserData(newFields: Partial<typeof userData>) {
     setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data
@@ -422,7 +422,7 @@ export default function Register() {
 
               try {
                 // register
-                const res = await fetch("http://172.20.10.2:3000/user/register", {
+                const res = await fetch("http://localhost:3000/user/register", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify(payload),
@@ -436,7 +436,7 @@ export default function Register() {
                 }
 
                 // login right after register
-                const loginRes = await fetch("http://172.20.10.2:3000/user/login", {
+                const loginRes = await fetch("http://localhost:3000/user/login", {
                   method: "POST",
                   headers: { "Content-Type": "application/json" },
                   body: JSON.stringify({
@@ -453,7 +453,7 @@ export default function Register() {
                   return;
                 }
                 // save user to UI layout
-                login(loginData.user);
+                login(loginData.user, loginData.trainingPlan);
                 
                 navigation.reset({
                   index: 0,

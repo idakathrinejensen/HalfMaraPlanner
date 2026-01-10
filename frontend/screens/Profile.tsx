@@ -19,7 +19,7 @@ const Settings = () => {
         >
           <Appbar.Header style={styles.appBar}>
             <Appbar.Content
-              title="Settings"
+              title="Profile"
               titleStyle={{
                 fontSize: 30,
                 fontWeight: "bold",
@@ -31,7 +31,7 @@ const Settings = () => {
 
           {/* PROFILE */}
           <View style={styles.sectionHeaderRow}>
-            <Text style={styles.sectionTitle}>PROFILE</Text>
+            <Text style={styles.sectionTitle}>ABOUT YOU</Text>
           </View>
 
           <View style={styles.card}>
@@ -89,7 +89,7 @@ const Settings = () => {
 
           {/* ABOUT */}
           <View style={styles.sectionHeaderRow}>
-            <Text style={styles.sectionTitle}>ABOUT</Text>
+            <Text style={styles.sectionTitle}>ABOUT US</Text>
           </View>
 
           <View style={styles.card}>

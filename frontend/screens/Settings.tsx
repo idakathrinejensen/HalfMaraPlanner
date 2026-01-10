@@ -73,7 +73,7 @@ const Settings = () => {
 
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Start Date</Text>
-                <Text style={styles.cardValue}>November 26, 2025</Text>
+                <Text style={styles.cardValue}>January 11, 2026</Text>
               </View>
             </View>
 
@@ -82,7 +82,7 @@ const Settings = () => {
               <Image source={require("../assets/icons/trophy_purple.png")} style={styles.purpleIcon} resizeMode="contain" />
               <View style={styles.iconRowText}>
                 <Text style={styles.cardLabel}>Target Race Date</Text>
-                <Text style={styles.cardValue}>June 21, 2026</Text>
+                <Text style={styles.cardValue}>April 5, 2026</Text>
               </View>
             </View>
           </View>

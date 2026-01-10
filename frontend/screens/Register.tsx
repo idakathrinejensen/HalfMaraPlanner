@@ -157,7 +157,18 @@ export default function Register() {
         >
           <Text style={{ color: 'white', textAlign: 'center', fontWeight: 'bold' }}>Continue</Text>
         </Pressable>
-
+          {/* Navigate to login Screen */}
+          <Text
+            onPress={() => navigation.navigate('Login' as never)}
+            style={{
+              color: '#cbd5e1',
+              marginTop: 20,
+              textAlign: 'center',
+              textDecorationLine: 'underline',
+            }}
+          >
+            Already have an account? Go to login
+          </Text>
       </View>
     );
   }

@@ -133,7 +133,7 @@ const MarkAsComplete = async () => {
                 {/* header */}
                 <View style={styles.headerRow}>
                   <View>
-                    <Text style={styles.greeting}>Good morning,</Text>
+                    <Text style={styles.greeting}>Good afternoon,</Text>
                     <Text style={styles.name}>{user?.fullName ?? "Runner"}</Text>
                 </View>
                 </View>

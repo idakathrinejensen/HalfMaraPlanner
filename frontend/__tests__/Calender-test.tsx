@@ -11,7 +11,7 @@ jest.mock("react-native-safe-area-context", () => {
   };
 });
 
-//
+// Appbar mock (so "Training Calendar" title is actually rendered)
 jest.mock("react-native-paper", () => {
   const React = require("react");
   const { View, Text } = require("react-native");
@@ -39,6 +39,7 @@ beforeEach(() => {
   mockUseAuth.mockReset();
 });
 
+// Valid training plan with one completed workout
 test("valid: shows week + workout and ✓ Completed", () => {
   mockUseAuth.mockReturnValueOnce({
     trainingPlan: {
@@ -67,6 +68,7 @@ test("valid: shows week + workout and ✓ Completed", () => {
   expect(getByText("✓ Completed")).toBeTruthy();
 });
 
+// Invalid: no training plan
 test("invalid: no training plan shows only header", () => {
   mockUseAuth.mockReturnValueOnce({ trainingPlan: null });
 

@@ -75,6 +75,7 @@ beforeEach(() => {
   });
 });
 
+// Invalid: location permission denied shows error
 test("invalid: location permission denied shows error", async () => {
   mockRequestForegroundPermissionsAsync.mockResolvedValueOnce({ status: "denied" });
 
@@ -86,6 +87,7 @@ test("invalid: location permission denied shows error", async () => {
   });
 });
 
+// Valid: location permission granted and Mark as Complete
 test("valid: Mark as Complete calls backend and updates plan", async () => {
   (global.fetch as jest.Mock).mockResolvedValueOnce({
     ok: true,

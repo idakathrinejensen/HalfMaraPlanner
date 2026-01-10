@@ -46,6 +46,7 @@ beforeEach(() => {
   mockUseAuth.mockReset();
 });
 
+// Valid user
 test("valid user shows name/email and logout resets", () => {
   mockUseAuth.mockReturnValueOnce({
     user: { fullName: "Sofus", email: "a@b.com" },
@@ -63,7 +64,8 @@ test("valid user shows name/email and logout resets", () => {
   expect(mockReset).toHaveBeenCalledWith({ index: 0, routes: [{ name: "Login" }] });
 });
 
-test("invalid user shows fallback Runner", () => {
+// Invalid user shows
+test("invalid user", () => {
   mockUseAuth.mockReturnValueOnce({ user: null, logout: mockLogout });
 
   const { getByText } = render(<Settings />);

@@ -28,6 +28,7 @@ beforeEach(() => {
   (global as any).fetch = jest.fn();
 });
 
+// Valid login
 test("logs in successfully", async () => {
   (global as any).fetch.mockResolvedValueOnce({
     ok: true,
@@ -43,6 +44,7 @@ test("logs in successfully", async () => {
   expect(mockReset).toHaveBeenCalled();
 });
 
+// Invalid login
 test("shows error for non-existing/invalid login", async () => {
   (global as any).fetch.mockResolvedValueOnce({
     ok: true,

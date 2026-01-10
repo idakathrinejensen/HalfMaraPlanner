@@ -2,7 +2,6 @@ import React from "react";
 import { render } from "@testing-library/react-native";
 import Calender from "../screens/Calender";
 
-// --- Minimal mocks so Jest doesn't crash ---
 
 jest.mock("react-native-safe-area-context", () => {
   const React = require("react");
@@ -12,6 +11,7 @@ jest.mock("react-native-safe-area-context", () => {
   };
 });
 
+//
 jest.mock("react-native-paper", () => {
   const React = require("react");
   const { View, Text } = require("react-native");

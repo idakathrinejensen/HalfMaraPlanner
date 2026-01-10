@@ -2,7 +2,7 @@ import React from "react";
 import { render, fireEvent, waitFor } from "@testing-library/react-native";
 import HomeScreen from "../screens/HomeScreen";
 
-// --- Minimal mocks so Jest doesn't crash ---
+
 jest.mock("react-native-safe-area-context", () => {
   const React = require("react");
   const { View } = require("react-native");

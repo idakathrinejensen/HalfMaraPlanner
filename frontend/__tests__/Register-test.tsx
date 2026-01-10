@@ -69,7 +69,8 @@ async function goToStep3(screen: any) {
   await waitFor(() => expect(getByText("2026-02-01")).toBeTruthy());
 }
 
-test("valid register + login resets to MainTabs", async () => {
+// Valid register + login resets to MainTabs
+test("valid register", async () => {
   (global as any).fetch
     .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true }) }) // register
     .mockResolvedValueOnce({
@@ -86,7 +87,8 @@ test("valid register + login resets to MainTabs", async () => {
   expect(mockReset).toHaveBeenCalled();
 });
 
-test("invalid register shows alert and does not log in", async () => {
+// Invalid register shows alert and does not log in
+test("invalid register", async () => {
   (global as any).fetch.mockResolvedValueOnce({
     ok: true,
     json: async () => ({ success: false, message: "Email already exists" }),

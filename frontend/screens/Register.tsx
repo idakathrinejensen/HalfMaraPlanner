@@ -299,7 +299,20 @@ export default function Register() {
     const [raceDate, setRaceDate] = useState<string>('');
     const [openDatePicker, setOpenDatePicker] = useState(false);
     const [selectedDate, setSelectedDate] = useState(new Date());
-    const isValid = duration !== '' && raceDate !== '';
+    // Validate that the training plan start date is not before today
+    const durationWeeks = Number(duration);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const raceDay = new Date(selectedDate);
+    raceDay.setHours(0, 0, 0, 0);
+
+    const planStartDate = new Date(raceDay);
+    planStartDate.setDate(planStartDate.getDate() - durationWeeks * 7);
+
+    const isPlanStartBeforeToday = duration !== '' && raceDate !== '' && planStartDate < today;
+
+    const isValid = duration !== '' && raceDate !== '' && !isPlanStartBeforeToday;
 
     return (
       <View style={{ gap: 16 }}>
@@ -355,10 +368,15 @@ export default function Register() {
             borderColor: '#334155',
           }}
         >
-          <Text style={{ color: selectedDate ? 'white' : '#94a3b8' }}>
+          <Text style={{ color: 'white' }}>
             {raceDate || 'Select race date'}
           </Text>
         </Pressable>
+        {isPlanStartBeforeToday && (
+          <Text style={{ color: '#f87171', fontSize: 12 }}>
+            Your selected race date is too soon for a {duration}-week plan. Choose a later race date or a shorter duration.
+          </Text>
+        )}
 
         {openDatePicker && (
           <DateTimePicker

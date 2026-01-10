@@ -57,7 +57,7 @@ function loginUser(req, res) {
     }
 
     const { password: _pw, ...safeUser } = user;
-    return res.json({ success: true, user: safeUser });
+    return res.json({ success: true, user: safeUser, trainingPlan: user.trainingPlan, });
   } catch (err) {
     return res.status(500).json({ success: false, message: "Server error" });
   }

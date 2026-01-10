@@ -2,7 +2,7 @@ const weatherService = require("../services/weatherService");
 
 async function getWeather(req, res, next) {
   try {
-    const city = req.query.city || "Copenhagen";
+    const city = req.query.city || "Milan";
     const data = await weatherService.getWeatherByCity(city);
     res.json(data);
   } catch (err) {

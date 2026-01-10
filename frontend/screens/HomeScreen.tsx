@@ -298,13 +298,13 @@ const isCurrentWorkoutComplete = todayWorkout?.workout?.complete ?? false;
 
 <View style={styles.runsList}>
   {upcomingWorkouts.map((item, index) => (
-    <TouchableOpacity key={item.workout.isoDate || index} style={styles.runCard}>
+    <View key={item.workout.isoDate || index} style={styles.runCard}>
       <View>
         <Text style={styles.runDay}>{item.workout.date}</Text>
         <Text style={styles.runTitle}>{item.workout.description}</Text>
       </View>
       <Text style={styles.runTime}>{item.workout.time ?? ""}</Text>
-    </TouchableOpacity>
+    </View>
   ))}
 </View>
           </ScrollView>

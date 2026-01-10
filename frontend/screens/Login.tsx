@@ -1,5 +1,3 @@
-//login
-
 import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -37,7 +35,7 @@ export default function Login() {
       alert(data.message || 'Login failed. Please try again.');
       return;
     }
-    //save user to context
+    //save user and plan to context
     login(data.user, data.trainingPlan);
     
     // Navigate to Home screen on successful login
@@ -52,7 +50,7 @@ export default function Login() {
   }
 };
 
-  // Render login form
+
   return (
     <SafeAreaView style={{
       flex: 1,

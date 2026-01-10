@@ -9,19 +9,17 @@ const Profile = () => {
   const navigation = useNavigation<any>();
   const { user, logout, trainingPlan } = useAuth();
 
+  //calculate start date
   const calculateStartDate = (raceDatestr: string, numWeeks: number) => {
   const raceDate = new Date(raceDatestr);
-  
-  // Calculate total days to subtract (weeks * 7 days)
   const daysToSubtract = numWeeks * 7;
-  
-  // Create a new date object for the start date
   const startDate = new Date(raceDate);
   startDate.setDate(raceDate.getDate() - daysToSubtract);
   
   return startDate;
 };
 
+//for date formatting
 const formatDate = (input: Date | string) => {
   const date = typeof input === "string" ? new Date(input) : input;
   return date.toLocaleDateString("en-US", {
@@ -310,11 +308,11 @@ const styles = StyleSheet.create({
   avatarIcon: {
   width: 24,
   height: 24,
-  tintColor: "#FFFFFF", // remove if your asset already is white
+  tintColor: "#FFFFFF", 
 },
 purpleIcon: {
   width: 24,
   height: 24,
-  tintColor: "#8B80F9", // remove if your asset already is white
+  tintColor: "#8B80F9", 
 },
 });

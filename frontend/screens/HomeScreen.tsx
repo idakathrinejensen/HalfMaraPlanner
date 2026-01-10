@@ -46,7 +46,7 @@ const HomeScreen = () => {
     w => w.workout === todayWorkout!.workout
   );
 
-  // Take the next `nextCount` workouts after today
+  // Take the next workouts after today
   upcomingWorkouts.push(
     ...allWorkouts.slice(todayIndex + 1, todayIndex + 1 + nextCount)
   );
@@ -68,9 +68,6 @@ const HomeScreen = () => {
     const { latitude, longitude } = pos.coords;
 
     const w = await fetchWeatherByCoords(latitude, longitude);
-
-    // Fixed city; later replace with user's location/city setting
-    //const w = await fetchWeatherByCity("Milan");
     
     setWeather(w);
     setTips(generateTips(w));
@@ -262,11 +259,6 @@ const isCurrentWorkoutComplete = todayWorkout?.workout?.complete ?? false;
                     🌧️ {weather.precipitationProbability ?? 0}%
                   </Text>
                 </View>
-
-                {/* optional extra line if you want */}
-                {weather.rainMmLastHour > 0 ? (
-                  <Text style={styles.infoMeta}>Rain last hour: {weather.rainMmLastHour} mm</Text>
-                ) : null}
               </View>
 
               {/* Clothing */}

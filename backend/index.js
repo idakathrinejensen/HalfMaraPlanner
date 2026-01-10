@@ -9,11 +9,6 @@ require("dotenv").config(); // retrieving API key
 // Middleware to handle JSON
 app.use(express.json());
 
-// Example route
-app.get("/", (req, res) => {
-  res.send("Hello from your Node.js + Express backend!");
-});
-
 // weather route
 const weatherRoute = require("./routes/weatherRoute");
 app.use("/weather", weatherRoute);

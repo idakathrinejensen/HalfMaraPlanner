@@ -29,7 +29,7 @@ jest.mock("../assets/icons/grey.png", () => 1);
 jest.mock("../assets/icons/orange.png", () => 1);
 jest.mock("../assets/icons/purple.png", () => 1);
 
-// Mock AuthContext (override per test)
+// Mock AuthContext 
 const mockUseAuth = jest.fn();
 jest.mock("../context/AuthContext", () => ({
   useAuth: () => mockUseAuth(),

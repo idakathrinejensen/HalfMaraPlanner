@@ -1,4 +1,3 @@
-// user route
 
 const express = require("express");
 const { loginUser, registerUser, getTrainingPlan, markWorkoutComplete} = require("../controllers/userController");

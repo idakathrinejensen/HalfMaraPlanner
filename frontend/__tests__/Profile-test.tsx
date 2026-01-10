@@ -12,12 +12,12 @@ jest.mock("react-native-safe-area-context", () => {
   return { SafeAreaView: ({ children }: any) => React.createElement(View, null, children) };
 });
 
-// Navigation mock (Profile uses reset)
+// Navigation mock 
 jest.mock("@react-navigation/native", () => ({
   useNavigation: () => ({ reset: mockReset }),
 }));
 
-// Appbar mock (so "Profile" title is actually rendered)
+// Appbar mock 
 jest.mock("react-native-paper", () => {
   const React = require("react");
   const { View, Text } = require("react-native");
@@ -34,7 +34,7 @@ jest.mock("../assets/icons/profile.png", () => 1);
 jest.mock("../assets/icons/calendar_purple.png", () => 1);
 jest.mock("../assets/icons/trophy_purple.png", () => 1);
 
-// AuthContext mock (override per test)
+// AuthContext mock 
 const mockUseAuth = jest.fn();
 jest.mock("../context/AuthContext", () => ({
   useAuth: () => mockUseAuth(),

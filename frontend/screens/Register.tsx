@@ -1,4 +1,3 @@
-//register
 import React, { useState } from 'react';
 import { Pressable, Text, TextInput, View } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
@@ -19,7 +18,7 @@ export default function Register() {
   });
   const navigation = useNavigation<any>();
 
-  const { login, trainingPlan } = useAuth();
+  const { login} = useAuth();
 
   function updateUserData(newFields: Partial<typeof userData>) {
     setUserData(prev => ({ ...prev, ...newFields }));  // Merge new fields with existing data

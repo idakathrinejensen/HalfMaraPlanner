@@ -46,8 +46,8 @@ function makeTrainingPlan() {
   const d2 = new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
   const d3 = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0];
 
-  // UI currently indexes upcomingWorkouts[0..2],
-  // so we provide 3 upcoming workouts to avoid crashing.
+
+ 
   return {
     sections: [
       {

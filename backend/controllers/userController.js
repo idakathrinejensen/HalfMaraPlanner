@@ -4,7 +4,7 @@ const {generateHalfMarathonPlan} = require("../services/trainingplan")
 const dbPath = path.join(__dirname, "..", "users.json");
 
 function readDb() {
-  // Auto-initialize the DB file if it doesn't exist
+  // initialize the DB file if it doesn't exist
   if (!fs.existsSync(dbPath)) {
     fs.writeFileSync(dbPath, JSON.stringify({ users: [] }, null, 2));
     return { users: [] };
@@ -21,12 +21,11 @@ function readDb() {
     if (!Array.isArray(data.users)) data.users = [];
     return data;
   } catch (err) {
-    // Backup corrupted DB and reset to a clean structure (prototype-friendly)
+    // Backup corrupted DB and reset to a clean structure 
     const backupPath = `${dbPath}.corrupt.${Date.now()}.bak`;
     try {
       fs.copyFileSync(dbPath, backupPath);
     } catch (_) {
-      // ignore backup errors
     }
     fs.writeFileSync(dbPath, JSON.stringify({ users: [] }, null, 2));
     return { users: [] };
@@ -151,7 +150,7 @@ function getTrainingPlan(req, res) {
 }
 function markWorkoutComplete(req, res) {
   const userId = Number(req.params.id); // user id from URL
-  const { weekIndex, dayIndex } = req.body; // indices of the workout
+  const { weekIndex, dayIndex } = req.body; 
 
   if (isNaN(userId) || weekIndex === undefined || dayIndex === undefined) {
     return res.status(400).json({ success: false, message: "Invalid parameters" });

@@ -1,4 +1,4 @@
-// Helper: date formatting like "Wed, Nov 26"
+// date formatting like "Wed, Nov 26"
 function formatDateShort(d) {
   const opts = { weekday: "short", month: "short", day: "numeric" }; //short = mon instead of monday
   return new Date(d).toLocaleDateString("en-US", opts); //the language
@@ -6,7 +6,7 @@ function formatDateShort(d) {
 
 function getStartDateFromRace(raceDateStr, weeks) {
   const raceDate = new Date(raceDateStr); // convert raceDate to date object
-  if (isNaN(raceDate)) throw new Error("Invalid race date"); // check if it is valid
+  if (isNaN(raceDate)) throw new Error("Invalid race date"); 
 
   const startDate = new Date(raceDate); //create a date object for startdate
   startDate.setDate(raceDate.getDate() - weeks * 7); //modify startdate based on raceDate
@@ -14,7 +14,7 @@ function getStartDateFromRace(raceDateStr, weeks) {
   return startDate;
 }
 
-// Icons
+
 const ICONS = {
   rest: "green.png",
   easy: "grey.png",
@@ -47,8 +47,8 @@ function buildWeek(startOfWeekDate, level, weekIndex, totalWeeks) {
   // Determine lower volume weeks for longer plans
   const isStepBack = (weekIndex + 1) % 4 === 0 && totalWeeks >= 8; //stepback every fourth week for plans longer than 8
 
-  // Base long-run progression by level
-  const longBase = { beginner: 6, intermediate: 10, advanced: 12 }; // starting long-run km
+  // Base long-run 
+  const longBase = { beginner: 6, intermediate: 10, advanced: 12 }; 
   const longWeeklyIncrease = { beginner: 1, intermediate: 1.5, advanced: 2 };
   const maxLong = { beginner: 16, intermediate: 18, advanced: 19 };
 
@@ -145,7 +145,6 @@ function buildPlan(startDateStr, level, weeks) {
 
   const sections = [];
   for (let w = 0; w < weeks; w++) {
-    // start of this week = startDate + w*7 days
     const startOfWeek = new Date(startDate);
     startOfWeek.setDate(startDate.getDate() + w * 7); //handles changes in weeks
 
@@ -158,7 +157,7 @@ function buildPlan(startDateStr, level, weeks) {
   return sections;
 }
 
-// Main exported function: returns the plan
+
 function generateHalfMarathonPlan(raceDateStr, level, weeks) {
   const startDate = getStartDateFromRace(raceDateStr, weeks);
   const startDateStr = startDate.toISOString().split("T")[0];

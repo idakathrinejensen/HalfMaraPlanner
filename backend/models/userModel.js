@@ -1,4 +1,3 @@
-// user model
 
 const fs = require("fs");
 const path = require("path");
@@ -6,7 +5,7 @@ const path = require("path");
 const dbPath = path.join(__dirname, "..", "users.json");
 
 function readDb() {
-  // Auto-initialize the DB file if it doesn't exist
+  // initialize the DB file if it doesn't exist
   if (!fs.existsSync(dbPath)) {
     fs.writeFileSync(dbPath, JSON.stringify({ users: [] }, null, 2));
     return { users: [] };
@@ -21,12 +20,11 @@ function readDb() {
     if (!Array.isArray(data.users)) data.users = [];
     return data;
   } catch (err) {
-    // Backup corrupted DB and reset to a clean structure (prototype-friendly)
+    // Backup corrupted DB and reset to a clean structure
     const backupPath = `${dbPath}.corrupt.${Date.now()}.bak`;
     try {
       fs.copyFileSync(dbPath, backupPath);
     } catch (_) {
-      // ignore backup errors
     }
     fs.writeFileSync(dbPath, JSON.stringify({ users: [] }, null, 2));
     return { users: [] };

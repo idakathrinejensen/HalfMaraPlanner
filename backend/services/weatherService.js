@@ -38,7 +38,7 @@ async function getOneCall(lat, lon) {
   return resp.data;
 }
 
-// for hard-coded city - maybe delete?
+
 async function getWeatherByCity(city) {
   const { lat, lon, name, country } = await geocodeCity(city);
   const data = await getOneCall(lat, lon);

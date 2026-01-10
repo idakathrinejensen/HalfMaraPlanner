@@ -69,14 +69,14 @@ async function goToStep3(screen: any) {
   await waitFor(() => expect(getByText("2026-08-01")).toBeTruthy());
 }
 
-// Valid register + login resets to MainTabs
+// Valid register + login resets 
 test("valid register", async () => {
   (global as any).fetch
-    .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true }) }) // register
+    .mockResolvedValueOnce({ ok: true, json: async () => ({ success: true }) }) 
     .mockResolvedValueOnce({
       ok: true,
       json: async () => ({ success: true, user: { id: "1" }, trainingPlan: {} }),
-    }); // login
+    }); 
 
   const screen = render(<Register />);
   await goToStep3(screen);
